@@ -1,7 +1,7 @@
 # PrologVM
 
 Project:
-Java to C++
+Java to C++ Project
 
 C++ based Prolog Virtual Machine
 
