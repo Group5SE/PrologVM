@@ -1,5 +1,5 @@
 /*
-Author: Karthik Venkataramana Pemmaraju & Charishma Choudhary.
+Author: Karthik Venkataramana Pemmaraju & Charishma Damuluri.
 Compilation: g++ IntStack.h -c
 Description: Stack implementation of ints.
 
