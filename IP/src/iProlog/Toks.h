@@ -68,7 +68,6 @@ namespace iProlog
 // 			c = nextToken();
 // 		  }
 // 		}
-// //JAVA TO C++ CONVERTER WARNING: 'final' catch parameters are not available in C++:
 // //ORIGINAL LINE: catch (final IOException e)
 // 		catch (const IOException &e)
 // 		{
@@ -98,7 +97,6 @@ namespace iProlog
 // 				  t = L"c:" + sval;
 // 				}
 // 			  }
-// //ORIGINAL LINE: catch (final Exception e)
 // 			  catch (const std::exception &e)
 // 			  {
 // 				t = L"c:" + sval;
