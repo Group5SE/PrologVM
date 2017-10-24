@@ -3,6 +3,7 @@ Author: Karthik Venkataramana Pemmaraju and Charishma Damuluri.
 Compilation: g++ Toks.h -std=c++11
 Description: Splits the given file into tokens.
 Date: 10/23/2017.
+Reviewers:Keerthana Sadam,Bhavana
 */
 #include <iostream>
 #include <fstream>
@@ -67,7 +68,6 @@ namespace iProlog
 // 			c = nextToken();
 // 		  }
 // 		}
-// //JAVA TO C++ CONVERTER WARNING: 'final' catch parameters are not available in C++:
 // //ORIGINAL LINE: catch (final IOException e)
 // 		catch (const IOException &e)
 // 		{
@@ -97,7 +97,6 @@ namespace iProlog
 // 				  t = L"c:" + sval;
 // 				}
 // 			  }
-// //ORIGINAL LINE: catch (final Exception e)
 // 			  catch (const std::exception &e)
 // 			  {
 // 				t = L"c:" + sval;
