@@ -3,7 +3,7 @@
 Author: Karthik Venkataramana Pemmaraju.
 Compilation: g++ IntMap.h -std=c++11 -c
 Description: Represents the memory image of integers using HashMap implementation.
-						 available at https://github.com/mikvor/hashmapTest
+	     available at https://github.com/mikvor/hashmapTest
 Written on 10/28/2017
 =====================================================================================
 */
