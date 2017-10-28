@@ -1,9 +1,10 @@
 /*
+==================================================================
 Author: Karthik Venkataramana Pemmaraju & Charishma Damuluri.
 Compilation: g++ IntStack.h -c
 Description: Stack implementation of ints.
-
 Compiled and tested on 09/21/2017.
+==================================================================
 */
 
 #include <iostream>

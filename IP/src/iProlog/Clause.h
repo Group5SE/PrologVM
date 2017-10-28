@@ -1,7 +1,10 @@
 /*
+==================================================================
 Author: Karthik Venkataramana Pemmaraju
-Date: 09/17/2017
 Description: Data structure representation of a prolog Clause.
+Compilation: g++ Clause.h
+Compiled and tested on  09/17/2017
+==================================================================
 */
 
 #include <iostream>
