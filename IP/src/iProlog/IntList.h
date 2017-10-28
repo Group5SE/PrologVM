@@ -1,8 +1,10 @@
 /*
+==================================================================
 Author: Karthik Venkataramana Pemmaraju.
 Compilation: g++ IntList.h
 Description: Represents a data structure of sequence of ints.
 Compiled and tested on 09/17/2017
+==================================================================
 */
 
 

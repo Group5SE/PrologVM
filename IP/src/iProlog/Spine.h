@@ -1,8 +1,10 @@
 /*
+==================================================================
 Author: Karthik Venkataramana Pemmaraju.
 Compilation: g++ Spine.h
 Description: Represents the run time elements on heap.
 Compiled and tested on 09/27/2017
+==================================================================
 */
 
 #include <iostream>
