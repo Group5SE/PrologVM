@@ -3,7 +3,7 @@
 Author: Karthik Venkataramana Pemmaraju.
 Compilation: g++ IMap.h -std=c++11 -c
 Description: operates on HashMap with key being (int or char class) and value being
-						 IMap data structure. Defines corresponding operations on this data structure.
+	      IMap data structure. Defines corresponding operations on this data structure.
 Written on 10/28/2017
 ===============================================================================================
 */
