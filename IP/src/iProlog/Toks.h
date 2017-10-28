@@ -1,5 +1,5 @@
 /*
-=========================================================================================
+=====================================================================================================
 Author: Karthik Venkataramana Pemmaraju.
 Compilation: g++ Toks.h -std=c++11 -c
 Description: Splits the given file into tokens and creates a vector list.
@@ -8,7 +8,7 @@ Tested on 10/27/2017. For tests, see output_tokenizer.txt in test/test_tokenizer
 Dependencies:	Please make sure to include BOOST libraries available here:
 				http://www.boost.org/doc/libs/1_36_0/libs/tokenizer/tokenizer.htm
 				or via command line by: sudo apt-get install libboost-all-dev.
-==========================================================================================
+======================================================================================================
 */
 
 #include <iostream>
@@ -54,7 +54,7 @@ namespace iProlog
 	*	Given a token extracts the individual word or number and appends tag for it (c for condition, v for variable n for number).
 	*/
 	string Toks::getWord(string token)
-	  {
+	{
 		string t = "";
 		char first = token[0];
 		if((first == '_') || isupper(first)) // If it starts with _ or capital letters then it is a variable!
@@ -76,7 +76,7 @@ namespace iProlog
 			}
 		}
 		return t;
-	  }
+	}
 
 	/**
 	*	Builds our str class variable which consists of set of symbols that we ignore.
@@ -157,7 +157,7 @@ namespace iProlog
 	*	@param : s -  Name of the file, we want to tokenize.
 	*	@param : fromFile - Specifies, if s is from file or entire code is in single string, s.
 	* 	@return: returns Wsss which is an array of all clauses.
-	*   @desc : Our main driver fucntion which does the majority of tokenizing work.
+	*   	@desc : Our main driver fucntion which does the majority of tokenizing work.
 	*/
 	vector<vector<vector<string>>> Toks::toSentences(const string &s, bool fromFile)
 	{
