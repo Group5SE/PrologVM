@@ -7,11 +7,10 @@ Compiled and tested on 09/17/2017
 ==================================================================
 */
 
-
 #include <iostream>
 #include <vector>
+#include "IntStack.h"
 using namespace std;
-
 
 namespace iProlog{
 
@@ -28,10 +27,9 @@ namespace iProlog{
       static IntList getTail(const IntList *Xs);
       static IntList cons(const int X, const IntList *Xs);
       static IntList* app(vector<int> Xs,IntList *Ys);
-      // To - DO
-      // static IntStack toInts(IntList Xs);
-      // static int len(IntList *EXs);
-      // public String toString();
+      static IntStack toInts(IntList* Xs);
+      static int len(IntList *Xs);
+      string toString();
   };
 
   IntList::IntList(int h): head(h){ // Our head is initialized to h.
@@ -74,11 +72,23 @@ namespace iProlog{
       return Zs;
   }
 
-  // static int IntList::len(const IntList Xs) {
-  //   return 1;
-  // //  return toInts(Xs).size();
-  // }
+  int IntList::len(IntList* Xs) {
+    return toInts(Xs).size();
+  }
 
+  IntStack IntList::toInts(IntList* Xs){
+    IntStack is;
+    while (!IntList::isempty(Xs)) {
+      is.push(IntList::getHead(Xs));
+      IntList temp = getTail(Xs);
+      Xs = &temp;
+    }
+    return is;
+  }
+
+  string IntList::toString(){
+    return IntList::toInts(this).toString();
+  }
 }
 
 /*
