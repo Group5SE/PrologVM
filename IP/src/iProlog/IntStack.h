@@ -35,9 +35,9 @@ namespace iProlog {
     	void expand();
     	void shrink();
     	void reverse();
+    	vector <int> toArray();
     	// TO - DO (Not sure if these are required in C++.)
     	string toString();
-    	vector <int> toArray();
   };
 
   /*
@@ -153,6 +153,12 @@ namespace iProlog {
       stack[l - i - 1] = temp;
     }
   }
+
+  vector<int> IntStack::toArray(){
+    vector<int> temp(stack);
+    return temp;
+  }
+
 } // name space close.
 
 /*
