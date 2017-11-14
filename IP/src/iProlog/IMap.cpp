@@ -18,17 +18,17 @@ Written on 10/28/2017
 using namespace std;
 
 namespace iProlog{
-     /**
-     * Given a key and value, puts it into our hash map;
-    */
+
+  /**
+  * Given a key and value, puts it into our hash map;
+  */
   template <typename K>
   bool IMap<K>::put(const K key, const int val)
   {
     IntMap *vals = map[key];
     if (nullptr == vals)
     {
-      IntMap val; // Create a new IntMap (requires ATTENTION!).
-      vals = &val;
+      IntMap* vals = new IntMap();
       map.emplace(key, vals);
     }
     return vals->add(val);
@@ -44,8 +44,7 @@ namespace iProlog{
     if (nullptr == s)
     {
       // If Map is empty, create new Map (requires ATTENTION!).
-      IntMap t;
-      s = &t;
+      s = new IntMap();
     }
     return s;
   }
@@ -99,13 +98,13 @@ namespace iProlog{
     */
   vector<IMap<int> *> create(const int l)
   {
-    IMap<int> *first;
+    IMap<int> *first = new IMap<int>;
     //vector<IMap<int>*> imaps = static_cast<std::vector<IMap<int>*>>(java::lang::reflect::Array::newInstance(first->getClass(), l));
     vector<IMap<int> *> imaps(l); // create a vector of size l.
     imaps[0] = first;
     for (int i = 1; i < l; i++)
     {
-      IMap<int> *temp; // create a new pointer to IMap.
+      IMap<int> *temp = new IMap<int>; // create a new pointer to IMap.
       imaps[i] = temp;
     }
     return imaps;
@@ -133,8 +132,8 @@ namespace iProlog{
       ms.push_back(m);
       vms.push_back(vmaps[i]);
     }
-    vector<IntMap *> ims(ms.size());
-    vector<IntMap *> vims(vms.size());
+    vector<IntMap *> ims;
+    vector<IntMap *> vims;
     for (int i = 0; i < ims.size(); i++)
     {
       const IntMap *im = ms[i];

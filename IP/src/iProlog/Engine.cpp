@@ -20,6 +20,7 @@ Written on 11/11/2017
 #include <iterator>
 #include <vector>
 
+using namespace std;
 namespace iProlog{
 
 	int Engine::tag(const int t, const int w){
@@ -158,7 +159,8 @@ namespace iProlog{
 		for (std::vector<std::vector<std::vector<std::string>>>::iterator Wss = Wsss.begin(); Wss != Wsss.end(); ++Wss){
 			// clause starts here
 			std::unordered_map<std::string, IntStack*> refs;
-			IntStack *cs, *gs; 
+			IntStack *cs = new IntStack();
+			IntStack *gs = new IntStack(); 
 			std::vector<std::vector<std::string>> *Rss = mapExpand(*Wss);
 			int k = 0;
 		 	for(std::vector<std::vector<std::string>>::iterator ws= Rss -> begin(); ws != Rss -> end(); ++ws){
@@ -186,7 +188,7 @@ namespace iProlog{
 							std::unordered_map<std::string, IntStack*>::iterator itr = refs.find(L);
 							IntStack *Is = itr -> second; // returns map value.
 							if (nullptr == Is){
-								//Is = new IntStack(); NECESSARY?
+								Is = new IntStack(); // NECESSARY?
 								refs.insert({L, Is}); // puts into hash map.
 							}
 							Is->push(k);
@@ -199,7 +201,7 @@ namespace iProlog{
 							std::unordered_map<std::string, IntStack*>::iterator itr = refs.find(L);
 							IntStack *Is = itr -> second;
 							if (nullptr == Is){
-								//Is = new IntStack(); NECESSARY?
+								Is = new IntStack(); // NECESSARY?
 								refs.insert({L, Is}); // puts into hash map.
 							}
 							Is->push(k - 1);
@@ -246,15 +248,14 @@ namespace iProlog{
 		std::vector<int> tgs = gs->toArray();
 		Clause* C; // TO - DO = putClause(cs->toArray(), tgs, neck); (TO - DO)
 		Cs.push_back(C);
-	} // end clause set
-
-	const int ccount = Cs.size();
-	std::vector<Clause*> cls(ccount);
-	for (int i = 0; i < ccount; i++){
-		  cls[i] = Cs[i];
+		} // end clause set
+		const int ccount = Cs.size();
+		std::vector<Clause*> cls(ccount);
+		for (int i = 0; i < ccount; i++){
+			cls[i] = Cs[i];
+		}
+		return cls; 
 	}
-	return cls; 
-}
 	/*
 	 * encodes string constants into symbols while leaving
 	 * other data types untouched

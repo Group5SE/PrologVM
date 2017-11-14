@@ -11,20 +11,22 @@ Compiled and tested on 09/21/2017.
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <iterator>
+#include <sstream>
 
 using namespace std;
 
 namespace iProlog{
     
-    IntStack::IntStack() {
-       IntStack(SIZE);
+    IntStack::IntStack():IntStack(SIZE) {
+    
     }
     /*
         @type: Constructor.
         @parameter: None (We declare it to be size(16))
         @desc: Creating a stack of size 16 elements initially.
     */
-    IntStack::IntStack(int size = SIZE) {
+    IntStack::IntStack(int size = SIZE) { 
         this -> stack.resize(size);
         clear();
     }
@@ -38,8 +40,8 @@ namespace iProlog{
         @parameter: Top (integer)
         @desc: set the top of stack to arbitrary integer.
     */
-    void IntStack::setTop(const int top) {
-        this -> top = top;
+    int IntStack::setTop(const int top) {
+        return this -> top = top;
     }
 
     void IntStack::clear() {
@@ -57,15 +59,15 @@ namespace iProlog{
     */
     void IntStack::push(const int i) {
         // TO - DO
-        if (++top >= stack.size()) {
-        expand();
+        if (++top >= stack.size()) { 
+          expand();
         }
         stack[top] = i;
     }
 
     // Removes top element from stack.
-    int IntStack::pop() {
-        const int r = stack[top--];
+    int IntStack::pop() { 
+        const int r = stack[top--]; 
         shrink();
         return r;
     }
@@ -89,13 +91,12 @@ namespace iProlog{
     /*
     * dynamic array operation: doubles when full
     */
-    void IntStack::expand() {
-        cout << " Here in expand ";
+    void IntStack::expand() { 
         vector < int > ::iterator it;
         const int l = stack.size();
         vector < int > newstack(l << 1);
         it = stack.begin();
-        newstack.assign(it, (it + l)); // Copy l elements from stack to new stack System.arraycopy(stack, 0, newstack, 0, l);
+        newstack.assign(it, (it + l + 1)); // Copy l elements from stack to new stack System.arraycopy(stack, 0, newstack, 0, l);
         stack = newstack;
     }
 
@@ -111,17 +112,18 @@ namespace iProlog{
         if (top < MINSIZE) {
             l = MINSIZE;
         }
+        cout << "*************" << l << endl;
         vector < int > newstack(l);
         it = stack.begin();
-        newstack.assign(it, (it + top + 1)); // Copy (top + 1) elements from stack to new stack
+        newstack.assign(it, it + l); // Copy (top + 1) elements from stack to new stack
         stack = newstack;
         }
-        /*
-            @type: function.
-            @parameter: None
-            @desc: reverses the stack using a for- loop.
-        */
-
+       
+    /*
+        @type: function.
+        @parameter: None
+        @desc: reverses the stack using a for- loop.
+    */
     void IntStack::reverse() { // Code almost remains the same :)
         int l = size();
         int h = l >> 1;
@@ -133,35 +135,53 @@ namespace iProlog{
         }
     }
 
-    vector<int> IntStack::toArray(){
-        vector<int> temp(stack);
+    vector<int> IntStack::toArray(){ 
+        vector < int > ::iterator it; 
+        it = stack.begin();
+        vector<int> temp(it, it + size());
         return temp;
     }
 
+    std::string IntStack::toString(){ 
+        std::vector<int> vec = toArray();
+        std::ostringstream oss; 
+        if (!vec.empty()){ 
+            std::copy(vec.begin(), vec.end()-1,
+            std::ostream_iterator<int>(oss, ","));
+            // Now add the last element with no delimiter
+            oss << vec.back();
+         }
+        return oss.str();
+    }
+}
     /*
     Driver functions to test IntStack.cpp (09/18/2017)
     ***********************************************
+    */
     int main(){
-        iProlog::IntStack is;
-        is.setTop(40); // Calling setTop() function.
-        cout << is.getTop() << endl ; // returns top of stack.
-        cout << is.isEmpty() << endl; // 0 for false , 1 for true
-        is.clear();
-        cout << is.getTop() << endl; // returns top of stack which is -1.
-        cout << "Pushing 1 \n";
-        is.push(1);
-        cout << "Popped up: " << is.pop() << endl ;
-        cout << "Size of Stack is : " << is.size() << endl;
-        cout << "Pushing 1 3 2 \n";
-        is.push(1);
-        is.push(3);
-        is.push(2);
-        cout << "Reversing: \n";
-        is.reverse();
-        cout << "Now element at top is: " << is.get(0);
+        iProlog::IntStack* stackValues = new iProlog::IntStack(5);
+        cout << "Is stack Empty? " << stackValues -> isEmpty() << endl;
+        stackValues->push(10);
+        cout << "Value of 'Top' in stack is: " << stackValues -> getTop() << endl;
+        stackValues -> push(20);
+        cout << "Set Top of stack: " << stackValues -> setTop(2) << endl;
+        stackValues -> push(40);
+        cout << "Element that is popped out: " << stackValues ->pop() << endl; 
+        cout << "Element at index 1 is: " <<  stackValues ->get(1) << endl;
+        stackValues -> set(2,50);
+        cout << "Element in the stack in Normal Order: " <<  stackValues -> toString() << endl;
+        stackValues -> reverse();
+        cout << "Element in the stack in reverse Order: " <<  stackValues -> toString() << endl;
+        stackValues -> push(30);
+        stackValues -> push(40);
+        stackValues -> push(60);
+        cout << "Current stack elements after calling expand(): " <<  stackValues -> toString() << endl;
+        for(int i = 0; i < 4; i++){
+		    stackValues -> pop();
+        }    
+        cout << "Current stack elements after calling shrink(): " <<  stackValues -> toString() << endl;
+        stackValues -> clear();
+        cout << "Size of stack after clearing is: " << stackValues -> size() << endl;
         return 0;
     }
-    */
-
-
-}
+    

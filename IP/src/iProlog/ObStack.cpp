@@ -1,4 +1,3 @@
-#include "ObStack.h"
 #include <iostream>
 #include <vector>
 #include <cstdlib>
@@ -7,28 +6,64 @@
 
 using namespace std;
 namespace iProlog{
+
+    template <class T>
+    class ObStack { 
+        private: 
+            vector<T> elems;    // elements 
+
+        public: 
+            void push(T const&);  // push element 
+            void pop();               // pop element 
+            T top() const;            // return top element 
+            
+            bool empty() const {      // return true if empty.
+                return elems.empty(); 
+            } 
+    }; 
+
     template <class T>
     void ObStack<T>::push (T const& elem) { 
+    // append copy of passed element 
     elems.push_back(elem);    
     } 
 
     template <class T>
     void ObStack<T>::pop () { 
     if (elems.empty()) { 
-        throw out_of_range("List is empty "); 
+        throw out_of_range("Stack<>::pop(): empty stack"); 
     }
     
-    
-    elems.pop_back();          // removing the last element
+    // remove last element 
+    elems.pop_back();         
     } 
 
     template <class T>
     T ObStack<T>::top () const { 
     if (elems.empty()) { 
-        throw out_of_range("ObStack<>::top(): empty ObStack"); 
+        throw out_of_range("Stack<>::top(): empty stack"); 
     }
     
-    
-    return elems.back();           // returns the last element 
-    } 
+    // return copy of last element 
+    return elems.back();      
+    }
 }
+
+int main() { 
+   try { 
+      iProlog::ObStack<string> stringStack;    // stack of strings 
+      // manipulate string stack 
+      stringStack.push("insert 1"); 
+	  stringStack.push("insert 2");
+	  stringStack.push("insert 3");
+	  stringStack.push("insert 4");
+      cout << "Top "<<stringStack.top() << std::endl; 
+      stringStack.pop(); 
+      cout <<"Top After pop "<< stringStack.top() << std::endl; 
+   }catch (exception const& ex) { 
+      cerr << "Exception: " << ex.what() <<endl; 
+      return -1;
+   } 
+}
+
+ 

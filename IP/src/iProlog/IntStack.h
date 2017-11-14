@@ -27,7 +27,7 @@ namespace iProlog {
 			IntStack();
       IntStack(int size);
     	int getTop();
-    	void setTop(const int top);
+    	int setTop(const int top);
     	void clear();
     	bool isEmpty();
     	void push(const int i);
@@ -38,8 +38,7 @@ namespace iProlog {
     	void expand();
     	void shrink();
     	void reverse();
-    	std::vector <int> toArray();
-    	// TO - DO (Not sure if these are required in C++.)
+    	std::vector <int> toArray(); 
     	std::string toString();
   };
 

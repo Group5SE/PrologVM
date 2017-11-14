@@ -8,6 +8,7 @@ Compiled and tested on  09/17/2017
 */
 #include "Clause.h"
 
+using namespace std;
 namespace iProlog{
 
     // Parameterized constructor to instantiate const variables.
