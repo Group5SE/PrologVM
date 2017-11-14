@@ -69,15 +69,13 @@ namespace iProlog{
     
     */
     int main(int argc, char const *argv[]) {
-     
-      iProlog::IntList *headEle = new iProlog::IntList(10); 
+      	  iProlog::IntList *headEle = new iProlog::IntList(10); 
 	  iProlog::IntList *curList = new iProlog::IntList(20, headEle); 
 	  cout << "Element in list are: "<<  curList -> toString() << endl;
 	  cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
 	  cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList).head << endl;
 	  cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
 	  cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(30, curList) -> toString() << endl;;
-      cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
-
-    return 0;
-    }
+     	  cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
+   	  return 0;
+     }
