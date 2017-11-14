@@ -2,7 +2,6 @@
 /**
 Dynamic Stack for int data.
  */
-package iProlog;
 import java.util.Arrays;
 
 class IntStack {
@@ -123,6 +122,36 @@ class IntStack {
   @Override
   public String toString() {
     return Arrays.toString(toArray());
+  }
+  
+  public static void main(String args[]){
+	  
+	  IntStack stackValues = new IntStack(5);
+	  System.out.println("Is stack Empty? "+stackValues.isEmpty());
+	  stackValues.push(10);
+	  System.out.println("Value of 'Top' in stack is: "+stackValues.getTop());
+	  stackValues.push(20);
+	  System.out.println("Set Top of stack: " + stackValues.setTop(2));
+	  stackValues.push(40);
+	  System.out.println("Element that is popped out: "+ stackValues.pop());
+	  System.out.println("Element at index 1 is: "+ stackValues.get(1));
+	  stackValues.set(2,50);
+	  System.out.println("Element in the stack in Normal Order: "+ stackValues.toString());
+	  stackValues.reverse();
+	  System.out.println("Element in the stack in reverse Order: "+ stackValues.toString());
+	  stackValues.push(30);
+	  stackValues.push(40);
+	  stackValues.push(60);
+	  System.out.println("Current stack elements after calling expand(): "+ stackValues.toString());
+	  for(int i = 0; i < 4; i++){
+		  stackValues.pop();
+    }
+    stackValues.shrink();
+	  System.out.println("Current stack elements after calling shrink(): "+ stackValues.toString());
+	  stackValues.clear();
+	  System.out.println("Size of stack after clearing is: "+stackValues.size());
+	  
+	  
   }
 
 }

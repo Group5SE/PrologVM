@@ -150,8 +150,7 @@ namespace iProlog {
     } // End of intersect0() function.
 
   IntStack* IntMap::intersect(vector <IntMap *> maps, vector < IntMap *> vmaps) {
-    IntStack r; // Call constructor
-    IntStack * ptr = & r;
+    IntStack *ptr = new IntStack();
     intersect0(maps[0], maps, vmaps, ptr);
     intersect0(vmaps[0], maps, vmaps, ptr);
     return ptr;

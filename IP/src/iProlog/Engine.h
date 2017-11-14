@@ -27,7 +27,7 @@ namespace iProlog{
 	class Engine
 	{
 		private:
-			std::vector<string> slist;
+			std::vector<std::string> slist;
 			/** runtime areas:
 			 *
 			 * the heap contains code for and clauses their their copies
@@ -52,7 +52,7 @@ namespace iProlog{
 			int MINSIZE = 1 << 15; // power of 2
 			IntStack *trail;
 			IntStack *ustack; 
-			ObStack<Spine> *spines;
+			ObStack<Spine> *spines = new ObStack<Spine>();
 			/**
 			 * tags of our heap cells - that can also be seen as
 			 * instruction codes in a compiled implementation
@@ -77,7 +77,7 @@ namespace iProlog{
 			std::vector<Clause>  clauses;
 			std::vector<int> cls;
 			std::map<std::string, int> syms;
-			Engine(const string fname);
+			Engine(const std::string fname);
 			~Engine(); 
 			int tag(const int t, const int w);
 			// removes tag after flipping sign
