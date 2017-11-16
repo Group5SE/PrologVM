@@ -1,3 +1,28 @@
+/*
+
+
+E:\Software Engineering\Exam_Karthik>git remote add origin https://github.com/Group5SE/PrologVM.git
+E:\Software Engineering\Exam_Karthik>git add words.txt
+E:\Software Engineering\Exam_Karthik>git add Palindrome.java
+
+E:\Software Engineering\Exam_Karthik>git commit -a -m "Uploaded probelm 2"
+[exam (root-commit) f914b35] Uploaded probelm 2
+ 2 files changed, 1033 insertions(+)
+ create mode 100644 Palindrome.java
+ create mode 100644 words.txt
+
+E:\Software Engineering\Exam_Karthik>git push origin exam -f
+Counting objects: 4, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 3.63 KiB | 0 bytes/s, done.
+Total 4 (delta 0), reused 0 (delta 0)
+To https://github.com/Group5SE/PrologVM.git
+ * [new branch]      exam -> exam
+
+
+ */
+
 import java.util.*;
 import java.io.*;
 class Palindrome
