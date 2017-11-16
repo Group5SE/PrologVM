@@ -1,4 +1,13 @@
 /*
+OUTPUT:
+a
+eye
+I
+level
+
+*/
+
+/*
 
 
 E:\Software Engineering\Exam_Karthik>git remote add origin https://github.com/Group5SE/PrologVM.git
