@@ -26,10 +26,10 @@ Compiled and tested on 09/27/2017
  namespace iProlog{
 
    class Spine{
-      private:
+      public:
           const int hd; // head of the clause to which this corresponds
           const int base; // top of the heap when this was created
-          const IntList *gs; // goals - with the top one ready to unfold
+          IntList *gs; // goals - with the top one ready to unfold
           const int ttop; // top of the trail when this was created
           int k;
           std::vector<int> xs; // index elements

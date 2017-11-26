@@ -1,4 +1,4 @@
-
+package iProlog;
 /**
 Dynamic Stack for int data.
  */

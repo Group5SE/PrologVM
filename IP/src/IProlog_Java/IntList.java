@@ -1,5 +1,5 @@
-
-class IntList extends IntStack {
+package iProlog;
+class IntList{
 
   private final int head;
   private final IntList tail;

@@ -158,30 +158,30 @@ namespace iProlog{
     Driver functions to test IntStack.cpp (09/18/2017)
     ***********************************************
     */
-    int main(){
-        iProlog::IntStack* stackValues = new iProlog::IntStack(5);
-        cout << "Is stack Empty? " << stackValues -> isEmpty() << endl;
-        stackValues->push(10);
-        cout << "Value of 'Top' in stack is: " << stackValues -> getTop() << endl;
-        stackValues -> push(20);
-        cout << "Set Top of stack: " << stackValues -> setTop(2) << endl;
-        stackValues -> push(40);
-        cout << "Element that is popped out: " << stackValues ->pop() << endl; 
-        cout << "Element at index 1 is: " <<  stackValues ->get(1) << endl;
-        stackValues -> set(2,50);
-        cout << "Element in the stack in Normal Order: " <<  stackValues -> toString() << endl;
-        stackValues -> reverse();
-        cout << "Element in the stack in reverse Order: " <<  stackValues -> toString() << endl;
-        stackValues -> push(30);
-        stackValues -> push(40);
-        stackValues -> push(60);
-        cout << "Current stack elements after calling expand(): " <<  stackValues -> toString() << endl;
-        for(int i = 0; i < 4; i++){
-		    stackValues -> pop();
-        }    
-        cout << "Current stack elements after calling shrink(): " <<  stackValues -> toString() << endl;
-        stackValues -> clear();
-        cout << "Size of stack after clearing is: " << stackValues -> size() << endl;
-        return 0;
-    }
+    // int main(){
+    //     iProlog::IntStack* stackValues = new iProlog::IntStack(5);
+    //     cout << "Is stack Empty? " << stackValues -> isEmpty() << endl;
+    //     stackValues->push(10);
+    //     cout << "Value of 'Top' in stack is: " << stackValues -> getTop() << endl;
+    //     stackValues -> push(20);
+    //     cout << "Set Top of stack: " << stackValues -> setTop(2) << endl;
+    //     stackValues -> push(40);
+    //     cout << "Element that is popped out: " << stackValues ->pop() << endl; 
+    //     cout << "Element at index 1 is: " <<  stackValues ->get(1) << endl;
+    //     stackValues -> set(2,50);
+    //     cout << "Element in the stack in Normal Order: " <<  stackValues -> toString() << endl;
+    //     stackValues -> reverse();
+    //     cout << "Element in the stack in reverse Order: " <<  stackValues -> toString() << endl;
+    //     stackValues -> push(30);
+    //     stackValues -> push(40);
+    //     stackValues -> push(60);
+    //     cout << "Current stack elements after calling expand(): " <<  stackValues -> toString() << endl;
+    //     for(int i = 0; i < 4; i++){
+	// 	    stackValues -> pop();
+    //     }    
+    //     cout << "Current stack elements after calling shrink(): " <<  stackValues -> toString() << endl;
+    //     stackValues -> clear();
+    //     cout << "Size of stack after clearing is: " << stackValues -> size() << endl;
+    //     return 0;
+    // }
     

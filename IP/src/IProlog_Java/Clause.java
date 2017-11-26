@@ -1,5 +1,8 @@
 
 package iProlog;
+
+import java.util.Arrays;
+
 /**
  * representation of a clause
  */
@@ -17,4 +20,18 @@ class Clause {
   final int base;
   final int neck;
   final int[] xs;
+  
+  public static void main(String[] args) {
+	
+	  Clause c = new Clause(10, new int[]{11, 22, 33},0,3, new int[]{0,1,2});
+	 System.out.println("length of heap slice: "+c.len);
+	 System.out.println("head+goals pointing to cells in cs: "+Arrays.toString(c.hgs));
+	 System.out.println("heap where this starts: "+ c.base);
+	 System.out.println("first after the end of the head: "+c.neck);
+	 System.out.println("indexables in head: "+Arrays.toString(c.xs));
+	 //c.len = 15; //try to change the values of varaibles to check whethere final keyword is working or not
+	 
+}
+  
+  
 }

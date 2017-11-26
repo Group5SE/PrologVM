@@ -17,7 +17,7 @@ namespace iProlog{
   public:
       const int head;
       const IntList *tail; // We need to use pointers because compiler doesn't size of IntList yet.
-      const IntList *empty = NULL;
+      IntList *empty = NULL;
     public:
       IntList(int h);
       IntList(const int X, const IntList *Xs);
