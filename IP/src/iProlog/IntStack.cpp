@@ -185,3 +185,34 @@ namespace iProlog{
     //     return 0;
     // }
     
+/*
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . IntStack.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/IntStack
+    Is stack Empty? true
+    Value of 'Top' in stack is: 0
+    Set Top of stack: 2
+    Element that is popped out: 40
+    Element at index 1 is: 20
+    Element in the stack in Normal Order: [10, 20, 50]
+    Element in the stack in reverse Order: [50, 20, 10]
+    Current stack elements after calling expand(): [50, 20, 10, 30, 40, 60]
+    Current stack elements after calling shrink(): [50, 20]
+    Size of stack after clearing is: 0
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntList.cpp Spine.cpp IntStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Is stack Empty? 1
+    Value of 'Top' in stack is: 0
+    Set Top of stack: 2
+    Element that is popped out: 40
+    Element at index 1 is: 20
+    Element in the stack in Normal Order: 10,20,50
+    Element in the stack in reverse Order: 50,20,10
+    Current stack elements after calling expand(): 50,20,10,30,40,60
+    Current stack elements after calling shrink(): 50,20
+    Size of stack after clearing is: 0
+*/

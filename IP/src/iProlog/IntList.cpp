@@ -105,3 +105,26 @@ namespace iProlog{
     //   cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
     //   return 0;
     // }
+/*
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . IntList.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/IntList
+    Element in list are: [20, 10]
+    Head Element in list: 20
+    Tail Element in list: [10]
+    Length of list: 2
+    New List after adding one element using cons(): [30, 20, 10]
+    New List after adding array of elements: [40, 50, 60, 20, 10]
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntList.cpp Spine.cpp IntStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Element in list are: 20,10
+    Head Element in list: 20
+    Tail Element in list: 10
+    Length of list: 2
+    New List after adding one element using cons(): 30,20,10
+    New List after adding array of elements: 40,50,60,20,10
+*/

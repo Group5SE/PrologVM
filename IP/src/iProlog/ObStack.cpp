@@ -66,4 +66,21 @@ namespace iProlog{
 //    } 
 // }
 
+/*
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . ObStack.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/ObStack
+    Top insert 4
+    Top After Pop insert 3
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ ObStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Top insert 4
+    Top After pop insert 3
+
+*/
+
  

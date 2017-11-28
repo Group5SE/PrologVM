@@ -295,6 +295,7 @@ namespace iProlog {
 	    b += "}";
 	    return b;
   }
+
   template<typename T>
   void IntMap::printVector(vector<T> x){
       cout << " [";
@@ -343,41 +344,41 @@ namespace iProlog {
 // }
 
 /*
-JAVA OUTPUT:
-Is map empty: true
-can we put keys with negative values: 0
-Is map empty: false
-IntMap after adding key value pairs(which shows (key-1) only): {50,49,-2}
-Value for given key in IntMap: 2
-value for given key after modifying its value: 3
-Check if a key is present in map: false
-Accessing key which is not present in map: 0
-Check if a key is present in map: true
-Can we add already existing key:true
-IntMap after adding key without any value: {51,50,49,-2} and its value is: 666
-Deleting the key which is not present in map: false
-Deleting the key which is not present in map: true; Current Map: {51,50,-2}
-size of current map:3
-Intersect two maps: [52, 51, -1, 20, 21, 51]
+  JAVA OUTPUT:
+  Is map empty: true
+  can we put keys with negative values: 0
+  Is map empty: false
+  IntMap after adding key value pairs(which shows (key-1) only): {50,49,-2}
+  Value for given key in IntMap: 2
+  value for given key after modifying its value: 3
+  Check if a key is present in map: false
+  Accessing key which is not present in map: 0
+  Check if a key is present in map: true
+  Can we add already existing key:true
+  IntMap after adding key without any value: {51,50,49,-2} and its value is: 666
+  Deleting the key which is not present in map: false
+  Deleting the key which is not present in map: true; Current Map: {51,50,-2}
+  size of current map:3
+  Intersect two maps: [52, 51, -1, 20, 21, 51]
 
-C++ OUTPUT:
-E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntMap.cpp IntStack.cpp -std=c++11
+  C++ OUTPUT:
+  E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntMap.cpp IntStack.cpp -std=c++11
 
-E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
-Is map empty: 1
-can we put keys with negative values: 0
-Is map empty: 0
-IntMap after adding key value pairs(which shows (key-1) only): {50,49,-2}
-Value for given key in IntMap: 2
-value for given key after modifying its value: 3
-Check if a key is present in map: 0
-Accessing key which is not present in map: 0
-Check if a key is present in map: 1
-Can we add already existing key:1
-IntMap after adding key without any value: {51,50,49,-2} and its value is: 666
-Deleting the key which is not present in map: 0
-4
-Deleting the key which is not present in map: 1; Current Map: {51,50,-2}
-size of current map:3
-Intersect two maps: 52,51,-1,20,21,51
+  E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+  Is map empty: 1
+  can we put keys with negative values: 0
+  Is map empty: 0
+  IntMap after adding key value pairs(which shows (key-1) only): {50,49,-2}
+  Value for given key in IntMap: 2
+  value for given key after modifying its value: 3
+  Check if a key is present in map: 0
+  Accessing key which is not present in map: 0
+  Check if a key is present in map: 1
+  Can we add already existing key:1
+  IntMap after adding key without any value: {51,50,49,-2} and its value is: 666
+  Deleting the key which is not present in map: 0
+  4
+  Deleting the key which is not present in map: 1; Current Map: {51,50,-2}
+  size of current map:3
+  Intersect two maps: 52,51,-1,20,21,51
 */

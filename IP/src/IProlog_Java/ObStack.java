@@ -1,3 +1,4 @@
+package iProlog;
 import java.util.ArrayList;
 class ObStack<T> extends ArrayList<T> {
 

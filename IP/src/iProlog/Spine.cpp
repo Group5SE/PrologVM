@@ -100,10 +100,14 @@ namespace iProlog{
   s2.cs: [0, 1, 2]
 
   OUR OUTPUT:
+  E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntList.cpp Spine.cpp IntStack.cpp -std=c++11
+
+  E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
   head: 0
   base: 0
-  Outside constructor Intlist (GS): 0 (WHAT ?)
+  IntList: 22,33
   ttop: 5
   s2 head : 11
   s2 k: 10
+  s2 cs: [0 1 2 ]
 */
