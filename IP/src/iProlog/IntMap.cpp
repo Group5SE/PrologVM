@@ -83,7 +83,7 @@ namespace iProlog {
   }
 
   int IntMap::get(const int key) const {
-    int ptr = (phiMix(key) & m_mask) << 1;
+    int ptr = (IntMap::phiMix(key) & m_mask) << 1;
     if (key == FREE_KEY)
       return m_hasFreeKey ? m_freeValue : NO_VALUE;
     int k = m_data[ptr];
@@ -166,7 +166,7 @@ namespace iProlog {
         m_freeValue = value;
         return ret;
       }
-      int ptr = (phiMix(key) & m_mask) << 1;
+      int ptr = (IntMap::phiMix(key) & m_mask) << 1;
       int k = m_data[ptr];
       if (k == FREE_KEY) { //end of chain already
         m_data[ptr] = key;
@@ -201,19 +201,20 @@ namespace iProlog {
     } // End of put() function.
 
   int IntMap::remove(const int key) {
+  
     if (key == FREE_KEY) {
       if (!m_hasFreeKey)
         return NO_VALUE;
       m_hasFreeKey = false;
-      --m_size;
+      --m_size; 
       return m_freeValue; //value is not cleaned
     }
     int ptr = (phiMix(key) & m_mask) << 1;
     int k = m_data[ptr];
     if (k == key) { //we check FREE prior to this call
-      const int res = m_data[ptr + 1];
-      IntMap::shiftKeys(ptr);
-      --m_size;
+      const int res = m_data[ptr + 1]; 
+      shiftKeys(ptr);  
+      --m_size; 
       return res;
     } else if (k == FREE_KEY)
       return NO_VALUE; //end of chain already
@@ -235,22 +236,22 @@ namespace iProlog {
    */
   int IntMap::shiftKeys(int pos) {
     int last, slot;
-    int k;
-    vector < int > data = m_data;
+    int k; 
     while (true) {
       pos = (last = pos) + 2 & m_mask2;
       while (true) {
-        if ((k = data[pos]) == FREE_KEY) {
-          data[last] = FREE_KEY;
+        if ((k = m_data[pos]) == FREE_KEY) {
+          m_data[last] = FREE_KEY;
           return last;
         }
-        slot = (phiMix(k) & m_mask) << 1; //calculate the starting slot for the current key
-        if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos)
+        slot = (IntMap::phiMix(k) & m_mask) << 1; //calculate the starting slot for the current key
+        if (last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos){
           break;
+        }
         pos = pos + 2 & m_mask2; //go to the next entry
       }
-      data[last] = k;
-      data[last + 1] = data[pos + 1];
+      m_data[last] = k;
+      m_data[last + 1] = m_data[pos + 1];
     }
   }
 
@@ -280,19 +281,103 @@ namespace iProlog {
   */
   string IntMap::toString() {
 	    string b = "{";
-	    const int l = m_data.size();
+	    const int l = m_data.size(); 
 	    bool first = true;
 	    for (int i = 0; i < l; i += 2) {
-	      const int v = m_data[i];
+        const int v = m_data[i]; 
 	      if (v != FREE_KEY) {
 	        if (!first)
 	          b += ",";
-	        first = false;
+          first = false; 
 	        b += to_string(v - 1);
 	      }
 	    }
 	    b += "}";
 	    return b;
   }
-
+  template<typename T>
+  void IntMap::printVector(vector<T> x){
+      cout << " [";
+      for(auto t = x.begin(); t != x.end(); ++t){
+        cout << *t << " ";
+      }
+      cout << "]";
+    }
 }
+
+// int main(){
+
+// 	  iProlog::IntMap noarg();
+// 	  iProlog::IntMap sizeargobj(10);
+// 	  iProlog::IntMap sizefillargobj(10, 0.5f);
+	  
+// 	  sizefillargobj.put(20, 1);
+// 	  sizefillargobj.put(21, 2);
+// 	  sizefillargobj.put(51, 4);
+// 	  //IntMap wrongfillobj = new IntMap(10, 2f);// Uncomment this to test error for wrong fill factor  
+// 	  //IntMap wrongsizeobj = new IntMap(-10);//Uncomment this to test error for wrong size( To Test this comment previous statement)
+// 	  cout << "Is map empty: "<<  sizeargobj.isEmpty() << endl;
+// 	  sizeargobj.put(50, 1);
+// 	  sizeargobj.put(51, 2);
+// 	  cout << "can we put keys with negative values: "<<  sizeargobj.put(-1,3) << endl;
+// 	  cout << "Is map empty: "<<  sizeargobj.isEmpty() << endl;
+// 	  cout << "IntMap after adding key value pairs(which shows (key-1) only): " <<  sizeargobj.toString() << endl;
+// 	  cout << "Value for given key in IntMap: " <<  sizeargobj.get(51) << endl;
+// 	  sizeargobj.put(51, 3);
+// 	  cout << "value for given key after modifying its value: " <<  sizeargobj.get(51) << endl;
+// 	  cout << "Check if a key is present in map: " <<  sizeargobj.contains(52)<< endl;
+// 	  cout << "Accessing key which is not present in map: " <<  sizeargobj.get(52) << endl;
+// 	  cout << "Check if a key is present in map: " <<  sizeargobj.contains(51) << endl;
+// 	  cout << "Can we add already existing key:" <<  sizeargobj.add(51) << endl;
+// 	  sizeargobj.add(52);
+// 	  cout << "IntMap after adding key without any value: " <<  sizeargobj.toString() <<  " and its value is: "<< sizeargobj.get(52) << endl;
+// 	  cout << "Deleting the key which is not present in map: "<<   sizeargobj.deleteKey(0) << endl;
+//     cout << sizeargobj.size() << endl; 
+//     cout << "Deleting the key which is not present in map: "<<   sizeargobj.deleteKey(50);
+//     cout << "; Current Map: " <<  sizeargobj.toString() << endl;
+//     cout << "size of current map:" <<  sizeargobj.size() << endl;
+//     iProlog::IntStack* list = sizeargobj.intersect(vector<iProlog::IntMap*> {&sizeargobj}, vector<iProlog::IntMap*> {&sizefillargobj} ); 
+// 	  cout << "Intersect two maps: "<< list -> toString();
+
+//   return 0;
+// }
+
+/*
+JAVA OUTPUT:
+Is map empty: true
+can we put keys with negative values: 0
+Is map empty: false
+IntMap after adding key value pairs(which shows (key-1) only): {50,49,-2}
+Value for given key in IntMap: 2
+value for given key after modifying its value: 3
+Check if a key is present in map: false
+Accessing key which is not present in map: 0
+Check if a key is present in map: true
+Can we add already existing key:true
+IntMap after adding key without any value: {51,50,49,-2} and its value is: 666
+Deleting the key which is not present in map: false
+Deleting the key which is not present in map: true; Current Map: {51,50,-2}
+size of current map:3
+Intersect two maps: [52, 51, -1, 20, 21, 51]
+
+C++ OUTPUT:
+E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntMap.cpp IntStack.cpp -std=c++11
+
+E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+Is map empty: 1
+can we put keys with negative values: 0
+Is map empty: 0
+IntMap after adding key value pairs(which shows (key-1) only): {50,49,-2}
+Value for given key in IntMap: 2
+value for given key after modifying its value: 3
+Check if a key is present in map: 0
+Accessing key which is not present in map: 0
+Check if a key is present in map: 1
+Can we add already existing key:1
+IntMap after adding key without any value: {51,50,49,-2} and its value is: 666
+Deleting the key which is not present in map: 0
+4
+Deleting the key which is not present in map: 1; Current Map: {51,50,-2}
+size of current map:3
+Intersect two maps: 52,51,-1,20,21,51
+*/

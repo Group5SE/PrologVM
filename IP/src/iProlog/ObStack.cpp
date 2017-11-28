@@ -49,21 +49,21 @@ namespace iProlog{
     }
 }
 
-int main() { 
-   try { 
-      iProlog::ObStack<string> stringStack;    // stack of strings 
-      // manipulate string stack 
-      stringStack.push("insert 1"); 
-	  stringStack.push("insert 2");
-	  stringStack.push("insert 3");
-	  stringStack.push("insert 4");
-      cout << "Top "<<stringStack.top() << std::endl; 
-      stringStack.pop(); 
-      cout <<"Top After pop "<< stringStack.top() << std::endl; 
-   }catch (exception const& ex) { 
-      cerr << "Exception: " << ex.what() <<endl; 
-      return -1;
-   } 
-}
+// int main() { 
+//    try { 
+//       iProlog::ObStack<string> stringStack;    // stack of strings 
+//       // manipulate string stack 
+//       stringStack.push("insert 1"); 
+// 	  stringStack.push("insert 2");
+// 	  stringStack.push("insert 3");
+// 	  stringStack.push("insert 4");
+//       cout << "Top "<<stringStack.top() << std::endl; 
+//       stringStack.pop(); 
+//       cout <<"Top After pop "<< stringStack.top() << std::endl; 
+//    }catch (exception const& ex) { 
+//       cerr << "Exception: " << ex.what() <<endl; 
+//       return -1;
+//    } 
+// }
 
  

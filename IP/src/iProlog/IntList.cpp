@@ -12,26 +12,29 @@ Compiled and tested on 09/17/2017
 using namespace std;
 
 namespace iProlog{
-    IntList::IntList(int h): head(h), tail(NULL){ // Our head is initialized to h.
-
+    IntList::IntList(int h){ // Our head is initialized to h.
+        head = h;
+        tail = NULL;
     }
 
-    IntList::IntList(int X, const IntList *Xs) : head (X), tail(Xs){
+    IntList::IntList(int X,  IntList *Xs) {
+        head = X;
+        tail = Xs;
     }
 
-    bool IntList::isempty(const IntList *Xs){ // C++ grammar defines static to be declared only once inside class. 
+    bool IntList::isempty(IntList *Xs){ // C++ grammar defines static to be declared only once inside class. 
         return NULL == Xs -> tail;
     }
 
-    int IntList::getHead(const IntList *Xs){
+    int IntList::getHead( IntList *Xs){
         return Xs -> head;
     }
 
-    IntList IntList::getTail(const IntList *Xs) {
-        return *Xs ->tail;
+    IntList* IntList::getTail( IntList *Xs) {
+        return &(*Xs ->tail);
     }
 
-    IntList* IntList::cons(const int X, const IntList *Xs) {
+    IntList* IntList::cons( int X,  IntList *Xs) {
         return new IntList(X, Xs);  // creating a new IntList.
     }
     
@@ -51,9 +54,8 @@ namespace iProlog{
         IntStack* is = new IntStack();
         while (!isempty(Xs)) {
             is -> push(getHead(Xs));   
-            IntList temp = getTail(Xs); 
-            Xs = &temp; 
-            if(temp.tail == NULL)
+            Xs = getTail(Xs);  
+            if(Xs -> tail == NULL)
                 is -> push(getHead(Xs));
         }
         return is;
@@ -62,22 +64,44 @@ namespace iProlog{
     string IntList::toString(){
       return IntList::toInts(this) -> toString();
     }
+
+    IntList::IntList(IntList &other){ // Copy constructor (deep copy)
+        head = other.head;
+        *tail = *(other.tail);
+        *empty = *(other.empty); 
+    }
+
+    IntList& IntList::operator=(const IntList&other){
+        if( this == &other) return *this;
+        else{
+            head = other.head;
+            *tail = *(other.tail);
+            *empty = *(other.empty); 
+        }
+    }
+
+    IntList::~IntList(){
+        delete tail;
+        delete empty;
+    }
+
+ 
+ 
 }
     /*
     Driver functions to test IntList.h (09/18/2017)
     ***********************************************
     
     */
-    // int main(int argc, char const *argv[]) {
+    // int main(int argc, char  *argv[]) {
      
     //   iProlog::IntList *headEle = new iProlog::IntList(10); 
 	//   iProlog::IntList *curList = new iProlog::IntList(20, headEle); 
 	//   cout << "Element in list are: "<<  curList -> toString() << endl;
 	//   cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
-	//   cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList).head << endl;
+	//   cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList)->head << endl;
 	//   cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
 	//   cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(30, curList) -> toString() << endl;;
     //   cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
-
-    // return 0;
+    //   return 0;
     // }

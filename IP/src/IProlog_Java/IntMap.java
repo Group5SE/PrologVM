@@ -2,6 +2,9 @@
  * derived from code at https://github.com/mikvor/hashmapTest
  */
 package iProlog;
+
+import java.util.Arrays;
+
 class IntMap implements java.io.Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -191,8 +194,8 @@ class IntMap implements java.io.Serializable {
     int k = m_data[ptr];
     if (k == key) //we check FREE prior to this call
     {
-      final int res = m_data[ptr + 1];
-      shiftKeys(ptr);
+      final int res = m_data[ptr + 1]; 
+      shiftKeys(ptr); 
       --m_size;
       return res;
     } else if (k == FREE_KEY)
@@ -219,7 +222,7 @@ class IntMap implements java.io.Serializable {
       pos = (last = pos) + 2 & m_mask2;
       while (true) {
         if ((k = data[pos]) == FREE_KEY) {
-          data[last] = FREE_KEY;
+          data[last] = FREE_KEY; 
           return last;
         }
         slot = (phiMix(k) & m_mask) << 1; //calculate the starting slot for the current key
@@ -238,6 +241,7 @@ class IntMap implements java.io.Serializable {
   }
 
   final private void rehash(final int newCapacity) {
+    
     m_threshold = (int) (newCapacity / 2 * m_fillFactor);
     m_mask = newCapacity / 2 - 1;
     m_mask2 = newCapacity - 1;
@@ -304,11 +308,11 @@ class IntMap implements java.io.Serializable {
   public String toString() {
     //return java.util.Arrays.toString(m_data);
     final StringBuffer b = new StringBuffer("{");
-    final int l = m_data.length;
+    final int l = m_data.length; 
     boolean first = true;
     for (int i = 0; i < l; i += 2) {
 
-      final int v = m_data[i];
+      final int v = m_data[i]; 
       if (v != FREE_KEY) {
         if (!first) {
           b.append(',');
@@ -320,5 +324,39 @@ class IntMap implements java.io.Serializable {
     b.append("}");
     return b.toString();
   }
-
+  public static void main(String[] args) {
+	  
+	  IntMap noarg = new IntMap();
+	  IntMap sizeargobj = new IntMap(10);
+	  IntMap sizefillargobj = new IntMap(10, 0.5f);
+	  
+	  sizefillargobj.put(20, 1);
+	  sizefillargobj.put(21, 2);
+	  sizefillargobj.put(51, 4);
+	  //IntMap wrongfillobj = new IntMap(10, 2f);// Uncomment this to test error for wrong fill factor  
+	  //IntMap wrongsizeobj = new IntMap(-10);//Uncomment this to test error for wrong size( To Test this comment previous statement)
+	  System.out.println("Is map empty: "+ sizeargobj.isEmpty());
+	  sizeargobj.put(50, 1);
+	  sizeargobj.put(51, 2);
+	  System.out.println("can we put keys with negative values: "+ sizeargobj.put(-1,3));
+	  System.out.println("Is map empty: "+ sizeargobj.isEmpty());
+	  System.out.println("IntMap after adding key value pairs(which shows (key-1) only): " + sizeargobj.toString());
+	  System.out.println("Value for given key in IntMap: " + sizeargobj.get(51));
+	  sizeargobj.put(51, 3);
+	  System.out.println("value for given key after modifying its value: " + sizeargobj.get(51));
+	  System.out.println("Check if a key is present in map: " + sizeargobj.contains(52));
+	  System.out.println("Accessing key which is not present in map: " + sizeargobj.get(52));
+	  System.out.println("Check if a key is present in map: " + sizeargobj.contains(51));
+	  System.out.println("Can we add already existing key:" + sizeargobj.add(51));
+	  sizeargobj.add(52);
+	  System.out.println("IntMap after adding key without any value: " + sizeargobj.toString() + " and its value is: "+sizeargobj.get(52));
+	  System.out.println(sizeargobj.size());
+    System.out.println("Deleting the key which is not present in map: "+  sizeargobj.delete(0)); 
+    System.out.println("Deleting the key which is not present in map: "+  sizeargobj.delete(50) + "; Current Map: " + sizeargobj);
+	  System.out.println("size of current map:" + sizeargobj.size());
+	  System.out.println("Intersect two maps: "+ IntMap.intersect(new IntMap[]{sizeargobj}, new IntMap[]{sizefillargobj}));
+	  //System.out.println(sizefillargobj.toString());
 }
+  
+}
+
