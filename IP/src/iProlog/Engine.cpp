@@ -2,7 +2,7 @@
 ==============================================================================================
 Author: Karthik Venkataramana Pemmaraju.
 Compilation: g++ Engine.cpp -std=c++11 -c 
-Written on 11/11/2017
+Written on 11/25/2017
 ===============================================================================================
 */
 
@@ -226,7 +226,7 @@ namespace iProlog{
 			  	}
 			}
 			if (-1 == leader){
-				 	// for vars, first V others U
+				// for vars, first V others U
 			  	leader = Is -> get(0);
 			  	for (auto &i: Is -> toArray()){
 					if (i == leader)
@@ -246,7 +246,7 @@ namespace iProlog{
 		}
 		const int neck = 1 == gs->size() ? cs->size() : detag(gs->get(1));
 		std::vector<int> tgs = gs->toArray();
-		Clause* C; // TO - DO = putClause(cs->toArray(), tgs, neck); (TO - DO)
+		Clause* C = putClause(cs->toArray(), tgs, neck); // (TO - DO)
 		Cs.push_back(C);
 		} // end clause set
 		const int ccount = Cs.size();
@@ -276,18 +276,19 @@ namespace iProlog{
 		return tag(t, w);
 	}
  
-	// /// places a clause built by the Toks reader on the heap 
-	// Clause *putClause(std::vector<int> &cs, std::vector<int> &gs, int const neck){
-	// 	const int base = size();
-	// 	const int b = tag(V, base);
-	// 	const int len = cs.size();
-	// 	pushCells(b, 0, len, cs);
-	// 	for (int i = 0; i < gs.size(); i++){
-	// 	  gs[i] = relocate(b, gs[i]);
-	// 	}
-	// 	const std::vector<int> xs = getIndexables(gs[0]);
-	// 	return new Clause(len, gs, base, neck, xs);
-	//   }
+	// places a clause built by the Toks reader on the heap 
+	Clause* Engine::putClause(std::vector<int> cs, std::vector<int> gs, int const neck){
+		const int base = size();
+		const int b = tag(V, base);
+		const int len = cs.size();
+		pushCells(b, 0, len, cs);
+		for (int i = 0; i < gs.size(); i++){
+		  gs[i] = relocate(b, gs[i]);
+		}
+		std::vector<int> xs = getIndexables(gs[0]);
+		return new Clause(len, gs, base, neck, xs);
+	}
+
 	int Engine::relocate(int const b, int const cell){
  		return tagOf(cell) < 3 ? cell + b : cell;
 	}
@@ -556,5 +557,392 @@ namespace iProlog{
 		}
 		return true;
 	}
+	 
+	/* 
+	 * pushes slice[from,to] of array cs of cells to heap
+	*/
+	void Engine::pushCells(int const b, int const from, int const to, int const base){
+		ensureSize(to - from);
+		for (int i = from; i < to; i++){
+		  push(relocate(b, heap[base + i]));
+		}
+	}
 
+	/*  
+	 * pushes slice[from,to] of array cs of cells to heap
+	*/  
+	void Engine::pushCells(int const b, int const from, int const to, vector<int> cs){
+		ensureSize(to - from);
+		for (int i = from; i < to; i++){
+		  push(relocate(b, cs[i]));
+		}
+	}
+
+	/* 
+	 * copies and relocates head of clause at offset from heap to heap
+	*/   
+	int Engine::pushHead(int const b, Clause * C){
+		pushCells(b, 0, C->neck, C->base);
+		const int head = C->hgs[0];
+		return relocate(b, head);
+	}
+
+	/* 	 
+
+	 * copies and relocates body of clause at offset from heap to heap
+ 	 * while also placing head as the first element of array gs that
+	 * when returned contains references to the toplevel spine of the clause
+	*/
+	vector<int> Engine::pushBody(int const b, int const head, Clause* C){
+		pushCells(b, C->neck, C->len, C->base);
+		const int l = C->hgs.size();
+		vector<int> gs(l);
+		gs[0] = head;
+		for (int k = 1; k < l; k++){
+		  const int cell = C->hgs[k];
+		  gs[k] = relocate(b, cell);
+		}
+		return gs;
+	}
+
+	/*
+	 * makes, if needed, registers associated to top goal of a Spine
+	 * these registers will be reused when matching with candidate clauses
+	 * note that xs contains dereferenced cells - this is done once for
+	 * each goal's toplevel subterms
+	*/
+	void Engine::makeIndexArgs(Spine* G, int const goal){
+		if (0 !=G -> xs.size()){
+		  return;
+		}
+		const int p = 1 + detag(goal);
+		const int n = std::min(MAXIND, detag(getRef(goal)));
+		std::vector<int> xs(MAXIND);
+		for (int i = 0; i < n; i++)
+		{
+		  const int cell = deref(heap[p + i]);
+		  xs[i] = cell2index(cell);
+		}
+		G->xs = xs;
+		if (imaps.size() == 0)
+		  return;
+		iProlog::IMap<int> iM;
+		std::vector<int> cs = iM.get(imaps, vmaps, xs);
+		G->cs = cs;
+	}
+	
+	int Engine::cell2index(int const cell){
+		int x = 0;
+		const int t = tagOf(cell);
+		if(t == R)
+			x = getRef(cell);
+		else if(t == N) 
+			x = cell; 
+		  // 0 otherwise - assert: tagging with R,C,N <>0
+		return x;
+	}
+	
+	std::vector<int> Engine::getIndexables(int const ref){
+		const int p = 1 + detag(ref);
+		const int n = detag(getRef(ref));
+		std::vector<int> xs(MAXIND);
+		for (int i = 0; i < MAXIND && i < n; i++){
+		  const int cell = deref(heap[p + i]);
+		  xs[i] = cell2index(cell);
+		}
+		return xs;
+	}
+
+	/* 
+	  * tests if the head of a clause, not yet copied to the heap
+	  * for execution could possibly match the current goal, an
+	  * abstraction of which has been place in xs
+	*/ 
+	bool Engine::match(std::vector<int> xs, Clause* C0){
+		for (int i = 0; i < MAXIND; i++){
+		  const int x = xs[i];
+		  const int y = C0 -> xs[i];
+		  if (0 == x || 0 == y)
+			continue;
+		  if (x != y)
+		  {
+			return false;
+		  }
+		}
+		return true;
+	}
+
+	/*
+	 * transforms a spine containing references to choice point and
+	 * immutable list of goals into a new spine, by reducing the
+	 * first goal in the list with a clause that successfully
+	 * unifies with it - in which case places the goals of the
+	 * clause at the top of the new list of goals, in reverse order
+	*/
+	Spine* Engine::unfold(Spine* G){
+		const int ttop = trail->getTop();
+		const int htop = getTop();
+		const int base = htop + 1;
+		const int goal = IntList::getHead(G->gs);
+		makeIndexArgs(G, goal);
+		const int last = G -> cs.size();
+		for (int k = G->k; k < last; k++){
+		Clause* C0 = clauses[G->cs[k]];
+		if (!match(G->xs, C0))
+		{
+			continue;
+		}
+		  const int base0 = base - C0->base;
+		  const int b = tag(V, base0);
+		  const int head = pushHead(b, C0);
+
+		  ustack->clear(); // set up unification stack
+
+		  ustack->push(head);
+		  ustack->push(goal);
+
+		  if (!unify(base))
+		  {
+			unwindTrail(ttop);
+			setTop(htop);
+			continue;
+		  }
+		  std::vector<int> gs = pushBody(b, head, C0);
+		  IntList* newgs = IntList::getTail(IntList::app(gs, IntList::getTail(G->gs)));
+		  G->k = k + 1;
+		  if (!IntList::isempty(newgs))
+		  {
+			return new Spine(gs, base, IntList::getTail(G->gs), ttop, 0, cls);
+		  }
+		  else
+		  {
+			return answer(ttop);
+		  }
+		} // end for
+		return nullptr;
+	  }
+
+    /**
+     * extracts a query - by convention of the form
+     * goal(Vars):-body to be executed by the engine
+    */ 
+	Clause* Engine::getQuery(){
+		return clauses[clauses.size() - 1];
+	}
+
+	/**
+    * returns the initial spine built from the
+    * query from which execution starts
+	*/
+	Spine* Engine::init(){	
+		IntList* ptr;
+		const int base = size();
+		Clause* G = getQuery();
+		Spine* Q = new Spine(G->hgs, base, ptr -> empty, trail->getTop(), 0, cls);
+		spines -> push(Q);
+		return Q;
+	}
+	/**
+     * returns an answer as a Spine while recording in it
+     * the top of the trail to allow the caller to retrieve
+     * more answers by forcing backtracking
+    */
+   	Spine* Engine::answer(int const ttop){
+		return new Spine(spines ->top()-> hd, ttop); // ATTTENNNNNNNNNTIOOOOOOOOOOOOOONNNNNNNN!!!!!!!!
+	}
+
+ 	/**
+     * detects availability of alternative clauses for the
+     * top goal of this spine
+    */
+    bool Engine::hasClauses(Spine* S){
+		return S->k < S->cs.size();
+	}
+
+ 	/**
+     * true when there are no more goals left to solve
+    */
+	bool Engine::hasGoals(Spine* S){
+		return !IntList::isempty(S->gs);
+	}
+
+ 	/**
+     * removes this spines for the spine stack and
+     * resets trail and heap to where they where at its
+     * creating time - while undoing variable binding
+     * up to that point
+    */
+	void Engine::popSpine(){
+		Spine*  G = spines->pop();
+		unwindTrail(G->ttop);
+		setTop(G->base - 1);
+	}
+
+	/**
+	 * main interpreter loop: starts from a spine and works
+	 * though a stream of answers, returned to the caller one
+	 * at a time, until the spines stack is empty - when it
+	 * returns null
+	*/
+	Spine* Engine::yield(){
+		while (!spines->empty()){
+		  Spine* G = spines->top();
+		  if (!hasClauses(G)){
+			popSpine(); // no clauses left
+			continue;
+		  }
+		  Spine* C = unfold(G);
+		  if (nullptr == C){
+			popSpine(); // no matches
+			continue;
+		  }
+		  if (hasGoals(C))
+		  {
+			spines->push(C);
+			continue;
+		  }
+		  return C; // answer
+		}
+		return nullptr;
+	}
+
+	/**
+     * retrieves an answers and ensure the engine can be resumed
+     * by unwinding the trail of the query Spine
+     * returns an external "human readable" representation of the answer
+	*/
+	template <typename T>
+	T* Engine::ask(){
+		query = yield();
+		if (nullptr == query)
+		{
+		  return nullptr;
+		}
+		const int res = answer(query->ttop)->hd;
+		T* R = exportTerm<T>(res);
+		unwindTrail(query->ttop);
+		return R;
+	}
+  
+	/**
+   	 * initiator and consumer of the stream of answers
+   	 * generated by this engine
+	*/
+	template <typename T>
+	void Engine::run(){
+		long long ctr = 0;
+		for (;; ctr++){
+		  T* abc = ask<T>();
+		  if (nullptr == abc)
+		  {
+			break;
+		  }
+		  if (ctr < 5)
+		  {
+			//  Prog::println("[" + std::to_string(ctr) + "] " + "*** ANSWER=" + showTerm<T>(A));
+			;
+		  }
+		}
+		if (ctr > 5)
+		{
+			;//	Prog::println(L"...");
+		}
+		// Prog::println(L"TOTAL ANSWERS=" + std::to_wstring(ctr));
+	}
+
+	// // indexing extensions - ony active if START_INDEX clauses or more
+	vector<IntMap*> Engine::vcreate(int const l){
+		vector<IntMap*> vss(l);
+		for (int i = 0; i < l; i++)
+		{
+		  vss[i] = new IntMap();
+		}
+		return vss;
+	}
+
+	void Engine::put(vector<IMap<int>*> imaps, vector<IntMap*> vss, vector<int> keys, int const val){
+		for (int i = 0; i < imaps.size(); i++){
+			IMap<int> iM; // ATTTTTTTTTTTTTTENNNNNNNNNNNNTIONNNNNNNNNNNN!!!!!!!!!!!!!
+			const int key = keys[i];
+		  if (key != 0)
+		  {
+			iM.put(imaps, i, key, val);
+		  }
+		  else
+		  {
+			vss[i]->add(val);
+		  }
+		}
+	}
+
+	vector<IMap<int>*>* Engine::index(vector<Clause*> clauses, vector<IntMap*> vmaps){
+		if (clauses.size() < START_INDEX)
+		{
+		  return nullptr;
+		}
+		IMap<int> im;
+		vector<IMap<int>*> imaps = im.create(vmaps.size());
+		for (int i = 0; i < clauses.size(); i++)
+		{
+		  Clause* c = clauses[i];
+		  put(imaps, vmaps, c->xs, i + 1); // $$$ UGLY INC
+
+		}
+		vector<IMap<int>*>* imPtr = &imaps;
+	// 		TO - DO
+	// 		Main::pp("INDEX");
+	// 		Main::pp(IMap::show(imaps));
+	// 		Main::pp(Arrays->toString(vmaps));
+	// 		Main::pp(L"");
+		return imPtr;
+	}
+	 
+	// Builds a new engine from a natural-language style assembler.nl file
+	Engine::~Engine(){
+	//	delete syms;
+		delete trail;
+		delete ustack;
+		delete spines;
+		delete query;
+	}
+
+	Engine::Engine(const std::string fname){
+		makeHeap();
+		query = init();
+		trail = new IntStack();
+		ustack = new IntStack();
+		clauses = dload(fname);
+    	cls = toNums(clauses);
+    	vmaps = vcreate(MAXIND);
+    	imaps = *(index(clauses, vmaps));
+	}
+	Engine& Engine::operator=(const Engine& other){ // Assignment overload.
+		if( this == &other) return *this;
+		else{
+			slist = other.slist;
+			heap = other.heap;
+			*trail = *(other.trail);
+			*ustack = *(other.ustack);
+			*spines = *(other.spines);
+			*query = *(other.query);
+			imaps = other.imaps;
+			vmaps = other.vmaps;
+			clauses = other.clauses;
+			cls = other.cls;
+			syms = other.syms; 
+		}
+	}
+	Engine::Engine(Engine &other){ // copy constructor.
+		slist = other.slist;
+		heap = other.heap;
+		*trail = *(other.trail);
+		*ustack = *(other.ustack);
+		*spines = *(other.spines);
+		*query = *(other.query);
+		imaps = other.imaps;
+		vmaps = other.vmaps;
+		clauses = other.clauses;
+		cls = other.cls;
+		syms = other.syms; 
+	} 
 }

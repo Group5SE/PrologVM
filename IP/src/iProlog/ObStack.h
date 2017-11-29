@@ -14,12 +14,12 @@ namespace iProlog{
                   std::vector<T> elems;    
             public: 
                   void push(T const&);       // push functionality
-                  void pop();                // pop functionality 
+                  T pop();                // pop functionality 
                   T top() const;             // return top element in the list(peek)
                   bool empty() const{        // return true if List is empty
                   return elems.empty(); 
                   } 
-       }; 
+      }; 
 
 }
 #endif

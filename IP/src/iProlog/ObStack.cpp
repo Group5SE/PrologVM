@@ -3,39 +3,25 @@
 #include <cstdlib>
 #include <string>
 #include <stdexcept>
-
+#include "ObStack.h"
 using namespace std;
 namespace iProlog{
 
-    template <class T>
-    class ObStack { 
-        private: 
-            vector<T> elems;    // elements 
-
-        public: 
-            void push(T const&);  // push element 
-            void pop();               // pop element 
-            T top() const;            // return top element 
-            
-            bool empty() const {      // return true if empty.
-                return elems.empty(); 
-            } 
-    }; 
-
-    template <class T>
+    template<class T>
     void ObStack<T>::push (T const& elem) { 
     // append copy of passed element 
     elems.push_back(elem);    
     } 
 
     template <class T>
-    void ObStack<T>::pop () { 
-    if (elems.empty()) { 
-        throw out_of_range("Stack<>::pop(): empty stack"); 
-    }
-    
-    // remove last element 
-    elems.pop_back();         
+    T ObStack<T>::pop () { 
+        T obj = elems.back();
+        if (elems.empty()) { 
+            throw out_of_range("Stack<>::pop(): empty stack"); 
+        }
+        // remove last element 
+        elems.pop_back();        
+        return obj; 
     } 
 
     template <class T>
