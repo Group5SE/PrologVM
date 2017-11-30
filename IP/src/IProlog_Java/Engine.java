@@ -905,7 +905,7 @@ class Engine {
    * more answers by forcing backtracking
    */
   final private Spine answer(final int ttop) {
-    return new Spine(spines.get(0).hd, ttop);
+    return new Spine(spines.top().hd, ttop);
   }
 
   /**

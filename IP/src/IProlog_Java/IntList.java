@@ -1,5 +1,5 @@
 package iProlog;
-class IntList {
+class IntList{
 
   private final int head;
   private final IntList tail;
@@ -56,5 +56,18 @@ class IntList {
   @Override
   public String toString() {
     return toInts(this).toString();
+  }
+  
+  
+  public static void main(String args[]){
+	  
+	  IntList headEle = new IntList(10);
+	  IntList curList = new IntList(20, headEle);
+	  System.out.println("Element in list are: "+ curList.toString());
+	  System.out.println("Head Element in list: "+ IntList.head(curList));
+	  System.out.println("Tail Element in list: "+ IntList.tail(curList));
+	  System.out.println("Length of list: "+ IntList.len(curList));
+	  System.out.println("New List after adding one element using cons(): " + IntList.cons(30, curList));
+	  System.out.println("New List after adding array of elements: "+ IntList.app(new int[]{40,50,60}, curList));
   }
 }
