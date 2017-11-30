@@ -9,6 +9,7 @@ Compiled and tested on 09/17/2017
 
 #include "IntList.h"
 #include "IntStack.h" 
+#include "random.cpp"
 using namespace std;
 
 namespace iProlog{
@@ -83,29 +84,33 @@ namespace iProlog{
     IntList::~IntList(){
         delete tail;
         delete empty;
-    }
-
- 
- 
+    } 
 }
     /*
     Driver functions to test IntList.h (09/18/2017)
     ***********************************************
     
     */
-    // int main(int argc, char  *argv[]) {
-     
-    //   iProlog::IntList *headEle = new iProlog::IntList(10); 
-	//   iProlog::IntList *curList = new iProlog::IntList(20, headEle); 
-	//   cout << "Element in list are: "<<  curList -> toString() << endl;
-	//   cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
-	//   cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList)->head << endl;
-	//   cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
-	//   cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(30, curList) -> toString() << endl;;
-    //   cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
-    //   return 0;
-    // }
+    int main(int argc, char  *argv[]) {
+        int n = 23456, n1 , n2 , n3; 
+        n = iProlog::random(n);
+        iProlog::IntList *headEle = new iProlog::IntList(n); 
+        n = iProlog::random(n);
+        iProlog::IntList *curList = new iProlog::IntList(n, headEle); 
+        cout << "Element in list are: "<<  curList -> toString() << endl;
+        cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
+        cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList)->head << endl;
+        cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
+        n = iProlog::random(n);
+        cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(n, curList) -> toString() << endl;
+        n1 = iProlog::random(n);
+        n2 = iProlog::random(n1);
+        n3 = iProlog::random(n2);
+        cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {n1 , n2, n3}, curList) -> toString();
+        return 0;
+    }
 /*
+    UNIT TESTING 
     JAVA OUTPUT:
     E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . IntList.java
 
@@ -127,4 +132,21 @@ namespace iProlog{
     Length of list: 2
     New List after adding one element using cons(): 30,20,10
     New List after adding array of elements: 40,50,60,20,10
+*/
+
+
+/*
+    RANDOM TESTING OUTPUT (11/29/2017):
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntList.cpp IntStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Element in list are: 466228,220028
+    Head Element in list: 466228
+    Tail Element in list: 220028
+    Length of list: 2
+    New List after adding one element using cons(): -669348,466228,220028
+    New List after adding array of elements: 540024,-172465,-128109,466228,220028
+
 */
