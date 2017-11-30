@@ -4,6 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include "ObStack.h"
+#include "random.cpp"
 using namespace std;
 namespace iProlog{
 
@@ -35,22 +36,26 @@ namespace iProlog{
     }
 }
 
-// int main() { 
-//    try { 
-//       iProlog::ObStack<string> stringStack;    // stack of strings 
-//       // manipulate string stack 
-//       stringStack.push("insert 1"); 
-// 	  stringStack.push("insert 2");
-// 	  stringStack.push("insert 3");
-// 	  stringStack.push("insert 4");
-//       cout << "Top "<<stringStack.top() << std::endl; 
-//       stringStack.pop(); 
-//       cout <<"Top After pop "<< stringStack.top() << std::endl; 
-//    }catch (exception const& ex) { 
-//       cerr << "Exception: " << ex.what() <<endl; 
-//       return -1;
-//    } 
-// }
+int main() { 
+   try { 
+      iProlog::ObStack<int> ob;    // stack of strings 
+      int number= 23456;
+      // manipulate string stack 
+      cout << "The random numbers are:\n "; 
+      for(int i = 0; i < 9; i++)
+      {
+          number = iProlog::random(number);
+          cout << number << ",";
+          ob.push(number);
+      } 
+      cout << "\nTop " << ob.top();
+      ob.pop();
+      cout << " \nTop After Pop " << ob.top();
+   }catch (exception const& ex) { 
+      cerr << "Exception: " << ex.what() <<endl; 
+      return -1;
+   } 
+}
 
 /*
     JAVA OUTPUT:
@@ -69,4 +74,23 @@ namespace iProlog{
 
 */
 
- 
+ /*
+    Random Testing (11/29/2017):
+
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . ObStack.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/ObStack
+    The random numbers are:
+    220028,466228,-669348,540024,-172465,-128109,-306285,-270547,72343,
+    Top 72343
+    Top After Pop -270547
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ ObStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    The random numbers are:
+    220028,466228,-669348,540024,-172465,-128109,-306285,-270547,72343,
+    Top 72343
+    Top After Pop -270547
+ */

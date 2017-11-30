@@ -18,15 +18,20 @@ class ObStack<T> extends ArrayList<T> {
   } 
 
  
-	public static void main(String[] args) { 
-      ObStack<String> ob=new ObStack<String>();
-      ob.push("insert 1");
-      ob.push("insert 2");
-      ob.push("insert 3");
-      ob.push("insert 4");
-      System.out.println("Top "+ob.peek());
+	public static void main(String[] args) {  
+      CustomGenerator cg = new CustomGenerator();
+      ObStack<Integer> ob = new ObStack<Integer>();
+      int number= 23456;
+      System.out.print("The random numbers are:\n "); 
+      for(int i = 0; i < 9; i++)
+      {
+          number = cg.random(number);
+          System.out.print(number+",");
+          ob.push(number);
+      } 
+      System.out.println("\nTop "+ob.peek());
       ob.pop();
-      System.out.println("Top After Pop "+ob.peek());
+      System.out.println(" \nTop After Pop "+ob.peek());
 	}
 
 }
