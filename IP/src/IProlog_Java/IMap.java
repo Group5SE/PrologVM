@@ -133,47 +133,36 @@ final class IMap<K> implements java.io.Serializable {
     return Arrays.toString(is);
   }
 
-  /*
+
   public static void main(final String[] args) {
     final IMap<Integer>[] imaps = create(3);
+    /*final IntMap vmap0 = imaps[0].get(10);
+    final int[] keys={100};*/
     put(imaps, 0, 10, 100);
     put(imaps, 1, 20, 200);
     put(imaps, 2, 30, 777);
-
-    put(imaps, 0, 10, 1000);
-    put(imaps, 1, 20, 777);
-    put(imaps, 2, 30, 3000);
-
-    put(imaps, 0, 10, 777);
-    put(imaps, 1, 20, 20000);
-    put(imaps, 2, 30, 30000);
-
-    put(imaps, 0, 10, 888);
-    put(imaps, 1, 20, 888);
-    put(imaps, 2, 30, 888);
-
-    put(imaps, 0, 10, 0);
-    put(imaps, 1, 20, 0);
-    put(imaps, 2, 30, 0);
-
-    //Main.pp(show(imaps));
-
-    //final int[] keys = { 10, 20, 30 };
-    //Main.pp("get=" + show(get(imaps, keys)));
-
-
-    final IMap<Integer>[] m = create(4);
-    Engine.put(m, new int[] { -3, -4, 0, 0 }, 0);
-    Engine.put(m, new int[] { -3, -21, 0, -21 }, 1);
-    Engine.put(m, new int[] { -19, 0, 0, 0 }, 2);
+    System.out.println(show(imaps));
+    //System.out.println(get(imaps,new IntMap[]{vmap0}, keys));
+    IMap<String> obj = new IMap<>();
     
-    final int[] ks = new int[] { -3, -21, -21, 0 };
-    Main.pp(show(m));
-    Main.pp("ks=" + Arrays.toString(ks));
-    
-    Main.pp("get=" + show(get(m, ks)));
-
-  }*/
+    obj.put("first", 10);
+    obj.put("second", 11);
+    obj.put("third", 12);
+    System.out.println("Set of keys in current IMap object: "+ obj.keySet());
+    System.out.println("Current IMap object: "+ obj);
+    System.out.println("Iterate through current IMap object using 'Iterator' and showing one of key: "+obj.keyIterator().next());
+    System.out.println("Size of IMap Object: "+ obj.size());
+    System.out.println("Remove element from IMap object by passing only key: "+ obj.remove("first"));
+    System.out.println("current IMap object: "+ obj);
+    System.out.println("Can we remove element from IMap object by passing wrong key and value: "+ obj.remove("second",10));
+    System.out.println("current IMap object: "+ obj);
+    System.out.println("Can we remove element from IMap object by passing correct key and value: "+ obj.remove("second",11));
+    System.out.println("Current IMap object: "+ obj);
+    System.out.println("Value of given key which doesn't exists in IMap : "+ obj.get("second"));
+    System.out.println("Value of given key which exists in IMap: "+ obj.get("third"));
+    obj.clear();
+    System.out.println("Size of IMap after clearing it:" + obj.size());
+  }
 
 }
 

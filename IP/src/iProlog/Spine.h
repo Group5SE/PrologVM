@@ -26,17 +26,23 @@ Compiled and tested on 09/27/2017
  namespace iProlog{
 
    class Spine{
-      private:
-          const int hd; // head of the clause to which this corresponds
-          const int base; // top of the heap when this was created
-          const IntList *gs; // goals - with the top one ready to unfold
-          const int ttop; // top of the trail when this was created
+      public:
+          int hd; // head of the clause to which this corresponds
+          int base; // top of the heap when this was created
+          IntList *gs; // goals - with the top one ready to unfold
+          int ttop; // top of the trail when this was created
           int k;
           std::vector<int> xs; // index elements
           std::vector<int> cs; // array of  clauses known to be unifiable with top goal in gs
       public:
+          ~Spine();
           Spine(int h, int t);
+          Spine(const Spine &);
           Spine(std::vector<int> gs0,int b,IntList *g, int top, int ks, std::vector<int> c);
+          Spine& operator= (const Spine&);
+          template<typename T>
+          void printVector(std::vector<T> x);
+
    };
 }
 #endif

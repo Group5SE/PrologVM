@@ -52,13 +52,15 @@ namespace iProlog {
 		    bool deleteKey(const int key);
 		    bool isEmpty();
 		    void intersect0(const IntMap * m, const std::vector < IntMap * > maps, const std::vector < IntMap * > vmaps, IntStack * r);
-		    IntStack * intersect(std::vector < IntMap * > maps, std::vector < IntMap * > vmaps);
+		    IntStack* intersect(std::vector < IntMap * > maps, std::vector < IntMap * > vmaps);
 		    int put(const int key, const int value);
 		    void rehash(const int capacity);
 		    int shiftKeys(int position);
 		    int remove(const int key);
 		    int size();
 		    std::string toString(); // Printing keys and values in m_data.
+			template<typename T>
+          	static void printVector(std::vector<T> x);
   }; // End of class.
 
 } // namespace close().

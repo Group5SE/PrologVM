@@ -24,7 +24,7 @@ namespace iProlog
   {
     private:
       // static const long long serialVersionUID = 1LL; (Not sure if we require this, as we are not serializing objects here.)
-      const std::unordered_map<K, IntMap *> map;
+      std::unordered_map<K, IntMap *> map;
 
     public:
       // IMap(); (We don't need constructor as we do not need to create instance for map in C++ unlike Java).
@@ -39,10 +39,12 @@ namespace iProlog
       int size();
       std::string toString();
       std::vector<IMap<int> *> create(const int l);
-      bool put(std::vector<IMap<int>> imaps, const int pos, const int key, const int val);
+      bool put(std::vector<IMap<int>*> imaps, const int pos, const int key, const int val);
       std::vector<int> get(std::vector<IMap<int> *> iMaps, std::vector<IntMap *> vmaps, std::vector<int> keys);
       std::string show(std::vector<int> is);
-      std::string show(std::vector<IMap<int> *> imaps);
+      std::string show(std::vector<IMap<int> *> imaps);	
+      std::string string_or_int(std::string s);	
+      std::string string_or_int(const int& s); 
   }; // End of class.
 
  

@@ -9,29 +9,33 @@ Compiled and tested on 09/17/2017
 
 #include "IntList.h"
 #include "IntStack.h" 
+#include "random.cpp"
 using namespace std;
 
 namespace iProlog{
-    IntList::IntList(int h): head(h), tail(NULL){ // Our head is initialized to h.
-
+    IntList::IntList(int h){ // Our head is initialized to h.
+        head = h;
+        tail = NULL;
     }
 
-    IntList::IntList(int X, const IntList *Xs) : head (X), tail(Xs){
+    IntList::IntList(int X,  IntList *Xs) {
+        head = X;
+        tail = Xs;
     }
 
-    bool IntList::isempty(const IntList *Xs){ // C++ grammar defines static to be declared only once inside class. 
+    bool IntList::isempty(IntList *Xs){ // C++ grammar defines static to be declared only once inside class. 
         return NULL == Xs -> tail;
     }
 
-    int IntList::getHead(const IntList *Xs){
+    int IntList::getHead( IntList *Xs){
         return Xs -> head;
     }
 
-    IntList IntList::getTail(const IntList *Xs) {
-        return *Xs ->tail;
+    IntList* IntList::getTail( IntList *Xs) {
+        return &(*Xs ->tail);
     }
 
-    IntList* IntList::cons(const int X, const IntList *Xs) {
+    IntList* IntList::cons( int X,  IntList *Xs) {
         return new IntList(X, Xs);  // creating a new IntList.
     }
     
@@ -51,9 +55,8 @@ namespace iProlog{
         IntStack* is = new IntStack();
         while (!isempty(Xs)) {
             is -> push(getHead(Xs));   
-            IntList temp = getTail(Xs); 
-            Xs = &temp; 
-            if(temp.tail == NULL)
+            Xs = getTail(Xs);  
+            if(Xs -> tail == NULL)
                 is -> push(getHead(Xs));
         }
         return is;
@@ -62,12 +65,33 @@ namespace iProlog{
     string IntList::toString(){
       return IntList::toInts(this) -> toString();
     }
+
+    IntList::IntList(IntList &other){ // Copy constructor (deep copy)
+        head = other.head;
+        *tail = *(other.tail);
+        *empty = *(other.empty); 
+    }
+
+    IntList& IntList::operator=(const IntList&other){
+        if( this == &other) return *this;
+        else{
+            head = other.head;
+            *tail = *(other.tail);
+            *empty = *(other.empty); 
+        }
+    }
+
+    IntList::~IntList(){
+        delete tail;
+        delete empty;
+    } 
 }
     /*
     Driver functions to test IntList.h (09/18/2017)
     ***********************************************
     
     */
+<<<<<<< HEAD
     int main(int argc, char const *argv[]) {
       	  iProlog::IntList *headEle = new iProlog::IntList(10); 
 	  iProlog::IntList *curList = new iProlog::IntList(20, headEle); 
@@ -79,3 +103,64 @@ namespace iProlog{
      	  cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
    	  return 0;
      }
+=======
+    int main(int argc, char  *argv[]) {
+        int n = 23456, n1 , n2 , n3; 
+        n = iProlog::random(n);
+        iProlog::IntList *headEle = new iProlog::IntList(n); 
+        n = iProlog::random(n);
+        iProlog::IntList *curList = new iProlog::IntList(n, headEle); 
+        cout << "Element in list are: "<<  curList -> toString() << endl;
+        cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
+        cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList)->head << endl;
+        cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
+        n = iProlog::random(n);
+        cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(n, curList) -> toString() << endl;
+        n1 = iProlog::random(n);
+        n2 = iProlog::random(n1);
+        n3 = iProlog::random(n2);
+        cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {n1 , n2, n3}, curList) -> toString();
+        return 0;
+    }
+/*
+    UNIT TESTING 
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . IntList.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/IntList
+    Element in list are: [20, 10]
+    Head Element in list: 20
+    Tail Element in list: [10]
+    Length of list: 2
+    New List after adding one element using cons(): [30, 20, 10]
+    New List after adding array of elements: [40, 50, 60, 20, 10]
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntList.cpp Spine.cpp IntStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Element in list are: 20,10
+    Head Element in list: 20
+    Tail Element in list: 10
+    Length of list: 2
+    New List after adding one element using cons(): 30,20,10
+    New List after adding array of elements: 40,50,60,20,10
+*/
+
+
+/*
+    RANDOM TESTING OUTPUT (11/29/2017):
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ IntList.cpp IntStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Element in list are: 466228,220028
+    Head Element in list: 466228
+    Tail Element in list: 220028
+    Length of list: 2
+    New List after adding one element using cons(): -669348,466228,220028
+    New List after adding array of elements: 540024,-172465,-128109,466228,220028
+
+*/
+>>>>>>> 05dff5de3d41f48b8117c8431d36693e8b35a9a5

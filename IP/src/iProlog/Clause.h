@@ -20,7 +20,7 @@ namespace iProlog {
 */
 
   class Clause {
-    private:
+    public:
       const int len; // length of heap slice
       const std::vector<int> hgs; // head+goals pointing to cells in cs
       const int base; // heap where this starts
@@ -28,6 +28,8 @@ namespace iProlog {
       const std::vector<int> xs; // indexables in head
     public:
       Clause(int l, std::vector<int> h, int b, int n, std::vector<int> x); // Parameterized constructor.
+      template<typename T>
+      static void printVector(std::vector<T> x);
   };
 
 }

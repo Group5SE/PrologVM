@@ -15,20 +15,26 @@ Compiled and tested on 09/17/2017
 namespace iProlog{
   class IntList{
   public:
-      const int head;
-      const IntList *tail; // We need to use pointers because compiler doesn't size of IntList yet.
-      const IntList *empty = NULL;
+      int head;
+      IntList* tail; // We need to use pointers because compiler doesn't size of IntList yet.
+      IntList* empty = NULL;
     public:
       IntList(int h);
-      IntList(const int X, const IntList *Xs);
-      static bool isempty(const IntList *Xs);
-      static int getHead(const IntList *Xs); // Changing name to gethead since head is already class variable.
-      static IntList getTail(const IntList *Xs);
-      static IntList* cons(const int X, const IntList *Xs);
+      IntList(int X,IntList *Xs);
+      static bool isempty(IntList *Xs);
+      static int getHead(IntList *Xs); // Changing name to gethead since head is already class variable.
+      static IntList* getTail(IntList *Xs);
+      static IntList* cons(int X, IntList *Xs);
       static IntList* app(std::vector<int> Xs,IntList *Ys);
       static IntStack* toInts(IntList* Xs);
       static int len(IntList *Xs);
       std::string toString();
+      /*
+        Rule of 3.
+      */
+      IntList& operator=(const IntList&);
+      IntList(IntList &);
+      ~IntList(); 
   };
 }
 #endif

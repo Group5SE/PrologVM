@@ -3,39 +3,26 @@
 #include <cstdlib>
 #include <string>
 #include <stdexcept>
-
+#include "ObStack.h"
+#include "random.cpp"
 using namespace std;
 namespace iProlog{
 
-    template <class T>
-    class ObStack { 
-        private: 
-            vector<T> elems;    // elements 
-
-        public: 
-            void push(T const&);  // push element 
-            void pop();               // pop element 
-            T top() const;            // return top element 
-            
-            bool empty() const {      // return true if empty.
-                return elems.empty(); 
-            } 
-    }; 
-
-    template <class T>
+    template<class T>
     void ObStack<T>::push (T const& elem) { 
     // append copy of passed element 
     elems.push_back(elem);    
     } 
 
     template <class T>
-    void ObStack<T>::pop () { 
-    if (elems.empty()) { 
-        throw out_of_range("Stack<>::pop(): empty stack"); 
-    }
-    
-    // remove last element 
-    elems.pop_back();         
+    T ObStack<T>::pop () { 
+        T obj = elems.back();
+        if (elems.empty()) { 
+            throw out_of_range("Stack<>::pop(): empty stack"); 
+        }
+        // remove last element 
+        elems.pop_back();        
+        return obj; 
     } 
 
     template <class T>
@@ -51,19 +38,59 @@ namespace iProlog{
 
 int main() { 
    try { 
-      iProlog::ObStack<string> stringStack;    // stack of strings 
+      iProlog::ObStack<int> ob;    // stack of strings 
+      int number= 23456;
       // manipulate string stack 
-      stringStack.push("insert 1"); 
-	  stringStack.push("insert 2");
-	  stringStack.push("insert 3");
-	  stringStack.push("insert 4");
-      cout << "Top "<<stringStack.top() << std::endl; 
-      stringStack.pop(); 
-      cout <<"Top After pop "<< stringStack.top() << std::endl; 
+      cout << "The random numbers are:\n "; 
+      for(int i = 0; i < 9; i++)
+      {
+          number = iProlog::random(number);
+          cout << number << ",";
+          ob.push(number);
+      } 
+      cout << "\nTop " << ob.top();
+      ob.pop();
+      cout << " \nTop After Pop " << ob.top();
    }catch (exception const& ex) { 
       cerr << "Exception: " << ex.what() <<endl; 
       return -1;
    } 
 }
 
- 
+/*
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . ObStack.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/ObStack
+    Top insert 4
+    Top After Pop insert 3
+
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ ObStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    Top insert 4
+    Top After pop insert 3
+
+*/
+
+ /*
+    Random Testing (11/29/2017):
+
+    JAVA OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>javac -d . ObStack.java
+
+    E:\Software Engineering\Term Project Clone\IP\src\IProlog_Java>java iProlog/ObStack
+    The random numbers are:
+    220028,466228,-669348,540024,-172465,-128109,-306285,-270547,72343,
+    Top 72343
+    Top After Pop -270547
+    C++ OUTPUT:
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>g++ ObStack.cpp -std=c++11
+
+    E:\Software Engineering\Term Project Clone\IP\src\iProlog>a.exe
+    The random numbers are:
+    220028,466228,-669348,540024,-172465,-128109,-306285,-270547,72343,
+    Top 72343
+    Top After Pop -270547
+ */

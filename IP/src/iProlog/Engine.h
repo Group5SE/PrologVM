@@ -52,7 +52,7 @@ namespace iProlog{
 			int MINSIZE = 1 << 15; // power of 2
 			IntStack *trail;
 			IntStack *ustack; 
-			ObStack<Spine> *spines = new ObStack<Spine>();
+			ObStack<Spine*>* spines = new ObStack<Spine*>();
 			/**
 			 * tags of our heap cells - that can also be seen as
 			 * instruction codes in a compiled implementation
@@ -67,17 +67,22 @@ namespace iProlog{
 			const int BAD = 7;
 		public:
 			Spine *query;
-			std::vector<IMap<int>> imaps;
-			std::vector<IntMap> vmaps;
+			std::vector<IMap<int>*> imaps;
+			std::vector<IntMap*> vmaps;
 			const int MAXIND = 3; // number of index args
 			const int START_INDEX = 20; // switches off indexing for less then START_INDEX clauses e.g. <20
 			/**
    			* trimmed down clauses ready to be quickly relocated to the heap
 			*/
-			std::vector<Clause>  clauses;
+			std::vector<Clause*>  clauses;
 			std::vector<int> cls;
 			std::map<std::string, int> syms;
 			Engine(const std::string fname);
+			/*
+       		 Rule of 3.
+      		*/
+			Engine& operator=(const Engine&); // Assignment overload.
+			Engine(Engine &); // copy constructor.
 			~Engine(); 
 			int tag(const int t, const int w);
 			// removes tag after flipping sign
@@ -120,6 +125,30 @@ namespace iProlog{
 			std::string showCells(std::vector<int>);
 			bool unify_args(int const w1, int const w2);
 			bool unify(int const base);
+			void pushCells(int const b, int const from, int const to, int const base);
+			void pushCells(int const b, int const from, int const to, std::vector<int> cs);
+			int pushHead(int const b, Clause * C);
+			void makeIndexArgs(Spine* G, int const goal);
+			std::vector<int> pushBody(int const b, int const head, Clause* C);
+			int cell2index(int const cell);
+			std::vector<int> getIndexables(int const ref);
+			bool match(std::vector<int> xs, Clause* C0);
+			Spine* unfold(Spine* G);
+			Clause* getQuery();
+			Spine* init();
+			Spine* answer(int const ttop);
+			bool hasClauses(Spine* S);
+			bool hasGoals(Spine* S);
+			Clause* putClause(std::vector<int> cs, std::vector<int> gs, int const neck);
+			void popSpine();
+			Spine* yield();
+			template <typename T>
+			T* ask();
+			template <typename T>
+			void run();
+			std::vector<IntMap*> vcreate(int const l);
+			void put(std::vector<IMap<int>*> imaps, std::vector<IntMap*> vss, std::vector<int> keys, int const val);
+			std::vector<IMap<int>*>* index(std::vector<Clause*> clauses, std::vector<IntMap*> vmaps);
 	};
 }
 #endif
