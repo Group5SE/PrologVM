@@ -1,4 +1,4 @@
-package iProlog;
+package iPrologUpdate;
 import java.util.*;
 
 /**
@@ -17,10 +17,10 @@ class Engine {
     syms = new LinkedHashMap<String, Integer>();
     slist = new ArrayList<String>();
 
-    makeHeap();
+    makeHeap();// create int[] of size 32768
 
-    trail = new IntStack();
-    ustack = new IntStack();
+    trail = new IntStack(); //create int[] of size 32768
+    ustack = new IntStack();//create int[] of size 32768
 
     clauses = dload(fname);
 
@@ -64,7 +64,7 @@ class Engine {
 
   private int heap[];
   private int top;
-  static int MINSIZE = 1 << 15; // power of 2
+  static int MINSIZE = 1 << 15; // power of 2 - 32768
 
   final private IntStack trail;
   final private IntStack ustack;
@@ -249,7 +249,7 @@ class Engine {
    */
   Clause[] dload(final String s) {
     final boolean fromFile = true;
-    final ArrayList<ArrayList<ArrayList<String>>> Wsss = Toks.toSentences(s, fromFile);
+    final ArrayList<ArrayList<ArrayList<String>>> Wsss = Toks.toSentences(s, fromFile); // 
 
     final ArrayList<Clause> Cs = new ArrayList<Clause>();
 
@@ -905,7 +905,7 @@ class Engine {
    * more answers by forcing backtracking
    */
   final private Spine answer(final int ttop) {
-    return new Spine(spines.top().hd, ttop);
+    return new Spine(spines.get(0).hd, ttop);
   }
 
   /**
@@ -1032,4 +1032,22 @@ class Engine {
     Main.pp("");
     return imaps;
   }
+  public static void main(String[] args) {
+	  
+	  final String fname = "D:/UNT/IP/test/test_tokenizer/add.pl.nl" ;
+	  Engine obj = new Engine(fname);
+	  System.out.println("Heap:"+ Arrays.toString(obj.heap));
+	  System.out.println("Heap length:" + obj.heap.length);
+	  System.out.println("Clauses Array: "+ Arrays.toString(obj.clauses));
+	  System.out.println("Int Clause Array with elements equal to 'Clause' :" + Arrays.toString(obj.cls));
+	/*  System.out.println("symbol map values:"+ obj.syms.values());
+	  System.out.println("symbol map keys:"+ obj.syms.keySet());*/
+	  System.out.println("Symbol map:" + obj.syms);
+	  System.out.println("Symbol List:" + obj.slist);
+	  System.out.println("Spine Query:" + obj.query);
+	  System.out.println("ObStack Spine:"+(obj.spines));
+	  System.out.println("IMap array of Integer: "+ Arrays.toString(obj.imaps));
+	  System.out.println("IntMap array:"+ Arrays.toString(obj.vmaps));
+	  obj.run();
+}
 }
