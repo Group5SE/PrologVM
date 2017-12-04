@@ -1,7 +1,11 @@
+package IProlog_Java;
 
-package iProlog;
 //import java.util.Arrays;
 import java.util.stream.Stream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
@@ -202,6 +206,36 @@ public class Prog extends Engine implements Spliterator<Object> {
       action.accept(R);
     }
     return ok;
+  }
+  
+  public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException{
+	  //1 test
+	  System.out.println("Hello");
+	  //2 Calling methods from this class
+	  String[] testData = new String[10];
+	  testData[0] = "Bhavana";
+	  testData[1] = "Karri";
+	  System.out.println(st0(testData));
+	  //3 Calling methods from IMap
+	  IMap<String> iMap = new IMap<>();
+	  iMap.put("studentId", 11001100);
+	  iMap.put("dlNumber", 12341234);
+	  System.out.println(iMap.toString());
+	  //4 Calling methods from Engine
+	  Engine engine = new Engine("progs/perms.pl");
+	  String response = (String) engine.exportTerm(5);
+	  System.out.println(response);
+	  //Saving all the responses to a local file for reference
+	  PrintWriter writer = new PrintWriter("progs/ResponseOut.txt", "UTF-8");
+	  writer.println("--calling Prog.java--");
+	  writer.println(st0(testData));
+	  writer.println("--calling IMap.java--");
+	  writer.println(iMap.toString());
+	  writer.println("--calling Engine.java--");
+	  writer.println(response);
+	  writer.close();
+	  
+	  
   }
 
 }
