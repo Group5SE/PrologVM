@@ -1,5 +1,9 @@
-
-package iProlog;
+/*
+ * author: Keerthana Sadam ; Date: 11/13/2017
+ * Included test cases which covers all functions
+ * modified test cases using random generator on 11/29/2017 
+ */
+package iPrologUpdate;
 class IntList {
 
   private final int head;
