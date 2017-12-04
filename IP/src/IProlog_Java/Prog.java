@@ -213,8 +213,8 @@ public class Prog extends Engine implements Spliterator<Object> {
 	  System.out.println("Hello");
 	  //2 Calling methods from this class
 	  String[] testData = new String[10];
-	  testData[0] = "Bhavana";
-	  testData[1] = "Karri";
+	  testData[0] = "Test";
+	  testData[1] = "data";
 	  System.out.println(st0(testData));
 	  //3 Calling methods from IMap
 	  IMap<String> iMap = new IMap<>();
