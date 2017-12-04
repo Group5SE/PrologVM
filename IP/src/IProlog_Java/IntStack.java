@@ -124,5 +124,85 @@ class IntStack {
   public String toString() {
     return Arrays.toString(toArray());
   }
+  
+public static void main(String args[]){
+	  int n = 7777;
+	  n = CustomGenerator.random(n);
+	  IntStack stackValues = new IntStack(n);
+	  System.out.println("Is stack Empty? "+stackValues.isEmpty());
+	  n = CustomGenerator.random(n);
+	  stackValues.push(n);
+	  System.out.println("Value of 'Top' in stack is: "+stackValues.getTop());
+	  n = CustomGenerator.random(n);
+	  stackValues.push(n);
+	  System.out.println("Set Top of stack: " + stackValues.setTop(2));
+	  n = CustomGenerator.random(n);
+	  stackValues.push(n);
+	  System.out.println("Element that is popped out: "+ stackValues.pop());
+	  System.out.println("Element at index 1 is: "+ stackValues.get(1));
+	  n = CustomGenerator.random(n);
+	  stackValues.set(2,n);
+	  System.out.println("Element in the stack in Normal Order: "+ stackValues.toString());
+	  stackValues.reverse();
+	  System.out.println("Element in the stack in reverse Order: "+ stackValues.toString());
+	  n = CustomGenerator.random(n);
+	  stackValues.push(n);
+	  n = CustomGenerator.random(n);
+	  stackValues.push(n);
+	  n = CustomGenerator.random(n);
+	  stackValues.push(n);
+	  System.out.println("Current stack elements after calling expand(): "+ stackValues.toString());
+	  for(int i = 0; i < 4; i++){
+		  stackValues.pop();
+	  }
+	  System.out.println("Current stack elements after calling shrink(): "+ stackValues.toString());
+	  stackValues.clear();
+	  System.out.println("Size of stack after clearing is: "+stackValues.size());
+	  
+	  
+  }
+  
+  /*public static void main(String args[]){
+	  
+	  IntStack stackValues = new IntStack(5);
+	  System.out.println("Is stack Empty? "+stackValues.isEmpty());
+	  stackValues.push(10);
+	  System.out.println("Value of 'Top' in stack is: "+stackValues.getTop());
+	  stackValues.push(20);
+	  System.out.println("Set Top of stack: " + stackValues.setTop(2));
+	  stackValues.push(40);
+	  System.out.println("Element that is popped out: "+ stackValues.pop());
+	  System.out.println("Element at index 1 is: "+ stackValues.get(1));
+	  stackValues.set(2,50);
+	  System.out.println("Element in the stack in Normal Order: "+ stackValues.toString());
+	  stackValues.reverse();
+	  System.out.println("Element in the stack in reverse Order: "+ stackValues.toString());
+	  stackValues.push(30);
+	  stackValues.push(40);
+	  stackValues.push(60);
+	  System.out.println("Current stack elements after calling expand(): "+ stackValues.toString());
+	  for(int i = 0; i < 4; i++){
+		  stackValues.pop();
+	  }
+	  System.out.println("Current stack elements after calling shrink(): "+ stackValues.toString());
+	  stackValues.clear();
+	  System.out.println("Size of stack after clearing is: "+stackValues.size());
+	  
+	  
+  }*/
+
+/*Java Output with Random Input: 
+		Is stack Empty? true
+		Value of 'Top' in stack is: 0
+		Set Top of stack: 2
+		Element that is popped out: -737382
+		Element at index 1 is: -796122
+		Element in the stack in Normal Order: [232043, -796122, -690523]
+		Element in the stack in reverse Order: [-690523, -796122, 232043]
+		Current stack elements after calling expand(): [-690523, -796122, 232043, 32124, 412485, -661361]
+		Current stack elements after calling shrink(): [-690523, -796122]
+		Size of stack after clearing is: 0
+
+ */
 
 }

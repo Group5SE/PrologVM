@@ -1,12 +1,17 @@
 /*
+==================================================================
 Author: Karthik Venkataramana Pemmaraju
-Date: 09/17/2017
 Description: Data structure representation of a prolog Clause.
+Compilation: g++ Clause.h
+Compiled and tested on  09/17/2017
+==================================================================
 */
 
+#ifndef CLAUSE
+#define CLAUSE
+
 #include <iostream>
-#include <vector>
-using namespace std;
+#include <vector> 
 
 namespace iProlog {
 /*
@@ -15,22 +20,17 @@ namespace iProlog {
 */
 
   class Clause {
-    private:
+    public:
       const int len; // length of heap slice
-      const vector<int> hgs; // head+goals pointing to cells in cs
+      const std::vector<int> hgs; // head+goals pointing to cells in cs
       const int base; // heap where this starts
       const int neck; // first after the end of the head
-      const vector<int> xs; // indexables in head
+      const std::vector<int> xs; // indexables in head
     public:
-      Clause(int l, vector<int> h, int b, int n, vector<int> x); // Parameterized constructor.
+      Clause(int l, std::vector<int> h, int b, int n, std::vector<int> x); // Parameterized constructor.
+      template<typename T>
+      static void printVector(std::vector<T> x);
   };
 
-  // Parameterized constructor to instantiate const variables.
-  Clause::Clause(int l, vector<int> h, int b, int n, vector<int> x)
-    : len(l)
-    , hgs(h)
-    , base(b)
-    , neck(n)
-    , xs(x){ // Default constructor for const variables.
-  }
 }
+#endif
