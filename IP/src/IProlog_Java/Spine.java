@@ -3,7 +3,7 @@
  * Included test cases which covers all functions
  *
  */
-package iPrologUpdate;
+package iProlog;
 
 import java.util.Arrays;
 
