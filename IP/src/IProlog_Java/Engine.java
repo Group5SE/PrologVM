@@ -1,4 +1,9 @@
-package iPrologUpdate;
+/*
+*author: keerthana Sadam; Date: 12/03/2017
+*Included test cases which checks all functions
+*/
+
+package iProlog;
 import java.util.*;
 
 /**
