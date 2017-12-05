@@ -6,7 +6,7 @@
 /**
  * derived from code at https://github.com/mikvor/hashmapTest
  */
-package iPrologUpdate;
+package iProlog;
 class IntMap implements java.io.Serializable {
   private static final long serialVersionUID = 1L;
 
