@@ -6,7 +6,7 @@
 /**
 Dynamic Stack for int data.
  */
-package iPrologUpdate;
+package iProlog;
 import java.util.Arrays;
 
 class IntStack {
