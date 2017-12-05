@@ -3,7 +3,7 @@
  * Included test cases which covers all functions
  * modified test cases using random generator on 11/29/2017 
  */
-package iPrologUpdate;
+package iProlog;
 class IntList {
 
   private final int head;
