@@ -1,11 +1,7 @@
-package IProlog_Java;
 
+package iPrologUpdate;
 //import java.util.Arrays;
 import java.util.stream.Stream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
@@ -38,9 +34,9 @@ public class Prog extends Engine implements Spliterator<Object> {
     return O.toString();
   }
 
-  static boolean isListCons(final Object name) {
-    return ".".equals(name) || "[|]".equals(name) || "list".equals(name);
-  }
+	  static boolean isListCons(final Object name) {
+	    return ".".equals(name) || "[|]".equals(name) || "list".equals(name);
+	  }
 
   static boolean isOp(final Object name) {
     return "/".equals(name) || "-".equals(name) || "+".equals(name) || "=".equals(name);
@@ -207,35 +203,28 @@ public class Prog extends Engine implements Spliterator<Object> {
     }
     return ok;
   }
+  public static void main(String[] args) {
+	  final String fname = "D:/UNT/IP/test/test_tokenizer/add.pl.nl" ;
+	 
+	  Spine s = new Spine(new int[]{97,52},5,IntList.empty,5,0, new int[]{0,1,2});
+	  Prog obj1  = new Prog(fname);
+	  Prog.pp(obj1);
+	  Prog.println(obj1);
+	  System.out.println(obj1.showTerm(new Engine(fname)));
+	  System.out.println(obj1.showTerm(new String[]{"+","b","a"}));
+	  System.out.println(obj1.showTerm(new String[][]{new String[]{".","b","a"}, 
+		  								new String[]{"/","b","a"}}));
+	  System.out.println(obj1.showTerm(new String[]{".","b","a"}));
+	  System.out.println(obj1.showTerm(new String[]{".","b","nil"}));
+	  System.out.println(obj1.showTerm(new String[]{"$VAR","b"}));
+	  System.out.println(obj1.showTerm(new String[]{"+","b","c","d"}));
+	  System.out.println("Symbol Table:");
+	  obj1.ppCode();
+	  obj1.ppc(s);
+	  
+	  //System.out.println(obj1.showTerm(new String[]{new String[]{"","b","a"}));
+}
   
-  public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException{
-	  //1 test
-	  System.out.println("Hello");
-	  //2 Calling methods from this class
-	  String[] testData = new String[10];
-	  testData[0] = "Test";
-	  testData[1] = "data";
-	  System.out.println(st0(testData));
-	  //3 Calling methods from IMap
-	  IMap<String> iMap = new IMap<>();
-	  iMap.put("studentId", 11001100);
-	  iMap.put("dlNumber", 12341234);
-	  System.out.println(iMap.toString());
-	  //4 Calling methods from Engine
-	  Engine engine = new Engine("progs/perms.pl");
-	  String response = (String) engine.exportTerm(5);
-	  System.out.println(response);
-	  //Saving all the responses to a local file for reference
-	  PrintWriter writer = new PrintWriter("progs/ResponseOut.txt", "UTF-8");
-	  writer.println("--calling Prog.java--");
-	  writer.println(st0(testData));
-	  writer.println("--calling IMap.java--");
-	  writer.println(iMap.toString());
-	  writer.println("--calling Engine.java--");
-	  writer.println(response);
-	  writer.close();
-	  
-	  
-  }
+  
 
 }
