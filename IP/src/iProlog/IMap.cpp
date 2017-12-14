@@ -158,12 +158,13 @@ namespace iProlog{
     vector<IntMap *> vims;
     for (int i = 0; i < ims.size(); i++)
     {
-      const IntMap *im = ms[i];
+      IntMap *im = ms[i];
       ims[i] = im;
-      const IntMap *vim = vms[i];
+      IntMap *vim = vms[i];
       vims[i] = vim;
     }
-    IntStack *cs = IntMap::intersect(ims, vims); // $$$ add vmaps here
+    IntMap m;
+    IntStack *cs = m.intersect(ims, vims); // $$$ add vmaps here
     vector<int> is = cs->toArray();
     for (int i = 0; i < is.size(); i++)
     {
@@ -191,6 +192,7 @@ namespace iProlog{
       s += " " + *it;
     return s;
   }
+  template class IMap<int>;
 }
 
 // int main(){

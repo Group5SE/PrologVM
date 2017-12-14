@@ -181,19 +181,19 @@ namespace iProlog{
 		}
 		cout << "] \n";
     } // close dispay().
-    
+}
     //	Driver functions to test Toks.h (09/27/2017)
 	//	Karthik Venkataramana Pemmaraju
 	//	Place add.pl.nl file in test/ directory into the current directory.
 	//	TO - DO (SHOULD WORK ON REMOVING SOURCE COMMENTS IN THE PROGRAM :()
 	// int main()
 	// {
-	// 	  	iProlog::Toks t;
-	// 		vector<vector<vector<string>>> Fsss = t.toSentences("add.pl.nl", true); // Reading from file.
+	// 		  iProlog::Toks t; 
+	// 		std::string str = "big.pl.nl"; 
+	// 		vector<vector<vector<string>>> Fsss = t.toSentences(str, true); // Reading from file.
 	// 		t.display(Fsss);
 	// 		cout << "\nFor String: \n";
 	// 		vector<vector<vector<string>>> Ssss = t.toSentences("add 0 X X .", false); // Reading from string.
 	// 		t.display(Ssss);
 	// 		return 0;
 	//  }
-}

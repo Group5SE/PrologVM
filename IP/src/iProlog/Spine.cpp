@@ -22,8 +22,8 @@ namespace iProlog{
       ttop = t;
       base = 0;
       k = -1;
-      cs.clear(); // Make cs an empty array std::vector.
-      gs = gs -> empty;
+      // cs.clear(); // Make cs an empty array std::vector.
+      gs = NULL;
    }
 
    /**

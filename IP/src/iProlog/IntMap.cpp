@@ -151,7 +151,7 @@ namespace iProlog {
 
   IntStack* IntMap::intersect(vector <IntMap *> maps, vector < IntMap *> vmaps) {
     IntStack *ptr = new IntStack();
-    if(maps.size() >= 1 && vmaps.size() >= 1){
+    if(maps.size() > 0 && vmaps.size() > 0){
       intersect0(maps[0], maps, vmaps, ptr);
       intersect0(vmaps[0], maps, vmaps, ptr);
     }

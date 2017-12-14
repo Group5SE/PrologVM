@@ -70,7 +70,7 @@ namespace iProlog {
 		{
 			buf +=".\n";
 		}
-		buf +="\n";
+		buf +=".\n";
 		return buf; // convert to toString();
 	}
 

@@ -7,7 +7,7 @@ c:-[natint].
 go:-  nconsult('progs/prog.nl'),#(goal,X),writeln(X),fail.
    
    
-go1:-nconsult('progs/perms.pl.nl'),time((#(goal,X),writeln(X),fail)).
+go1:-nconsult('progs/perms.p                              l.nl'),time((#(goal,X),writeln(X),fail)).
 go2:-nconsult('progs/queens.pl.nl'),time((#(goal,_),fail)).
 go3:-nconsult('progs/sud4x.pl.nl'),time((#(goal,_),fail)).
 go4:-nconsult('progs/mperms.pl.nl'),time((#(goal,_),fail)). 
