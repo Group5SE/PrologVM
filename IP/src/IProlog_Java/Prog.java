@@ -1,5 +1,5 @@
 
-package iProlog;
+package iPrologUpdate;
 //import java.util.Arrays;
 import java.util.stream.Stream;
 import java.util.Spliterator;
@@ -34,9 +34,9 @@ public class Prog extends Engine implements Spliterator<Object> {
     return O.toString();
   }
 
-  static boolean isListCons(final Object name) {
-    return ".".equals(name) || "[|]".equals(name) || "list".equals(name);
-  }
+	  static boolean isListCons(final Object name) {
+	    return ".".equals(name) || "[|]".equals(name) || "list".equals(name);
+	  }
 
   static boolean isOp(final Object name) {
     return "/".equals(name) || "-".equals(name) || "+".equals(name) || "=".equals(name);
@@ -203,5 +203,28 @@ public class Prog extends Engine implements Spliterator<Object> {
     }
     return ok;
   }
+  public static void main(String[] args) {
+	  final String fname = "D:/UNT/IP/test/test_tokenizer/add.pl.nl" ;
+	 
+	  Spine s = new Spine(new int[]{97,52},5,IntList.empty,5,0, new int[]{0,1,2});
+	  Prog obj1  = new Prog(fname);
+	  Prog.pp(obj1);
+	  Prog.println(obj1);
+	  System.out.println(obj1.showTerm(new Engine(fname)));
+	  System.out.println(obj1.showTerm(new String[]{"+","b","a"}));
+	  System.out.println(obj1.showTerm(new String[][]{new String[]{".","b","a"}, 
+		  								new String[]{"/","b","a"}}));
+	  System.out.println(obj1.showTerm(new String[]{".","b","a"}));
+	  System.out.println(obj1.showTerm(new String[]{".","b","nil"}));
+	  System.out.println(obj1.showTerm(new String[]{"$VAR","b"}));
+	  System.out.println(obj1.showTerm(new String[]{"+","b","c","d"}));
+	  System.out.println("Symbol Table:");
+	  obj1.ppCode();
+	  obj1.ppc(s);
+	  
+	  //System.out.println(obj1.showTerm(new String[]{new String[]{"","b","a"}));
+}
+  
+  
 
 }
