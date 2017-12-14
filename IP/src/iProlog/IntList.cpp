@@ -90,8 +90,6 @@ namespace iProlog{
     Driver functions to test IntList.h (09/18/2017)
     ***********************************************
     
-    */
-<<<<<<< HEAD
     int main(int argc, char const *argv[]) {
       	  iProlog::IntList *headEle = new iProlog::IntList(10); 
 	  iProlog::IntList *curList = new iProlog::IntList(20, headEle); 
@@ -103,7 +101,6 @@ namespace iProlog{
      	  cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {40,50,60}, curList) -> toString();
    	  return 0;
      }
-=======
     int main(int argc, char  *argv[]) {
         int n = 23456, n1 , n2 , n3; 
         n = iProlog::random(n);
@@ -122,6 +119,8 @@ namespace iProlog{
         cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {n1 , n2, n3}, curList) -> toString();
         return 0;
     }
+    
+    */
 /*
     UNIT TESTING 
     JAVA OUTPUT:
@@ -163,4 +162,3 @@ namespace iProlog{
     New List after adding array of elements: 540024,-172465,-128109,466228,220028
 
 */
->>>>>>> 05dff5de3d41f48b8117c8431d36693e8b35a9a5
