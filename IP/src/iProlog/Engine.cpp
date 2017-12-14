@@ -888,18 +888,11 @@ namespace iProlog{
 		  if (A.size() == 0)
 		  {
 				break;
-		  } 
-		  if (ctr < 5)
-		  {
-				cout << "[" + std::to_string(ctr) + "] " << "*** ANSWER = ";
-				showTerm(A);
-				cout << endl;
-		  }
-		}
-		if (ctr > 5)
-		{
-			cout << "...";
-		}
+		  }  
+			cout << "[" + std::to_string(ctr) + "] " << "*** ANSWER = ";
+			showTerm(A);
+			cout << endl; 
+		} 
 		 cout << "\nTOTAL ANSWERS= " << std::to_string(ctr) << endl;
 	}
 

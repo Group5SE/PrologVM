@@ -30,8 +30,7 @@ namespace iProlog
                     cout << (char *)o << endl;
             }
             
-            static void run(const std::string& fname){
-                std::chrono::high_resolution_clock::time_point start, end; 
+            static void run(const std::string& fname){ 
                 bool p = true;
                 string fname0 = fname+".nl";
                 std::cout << fname0 <<endl;
@@ -41,11 +40,11 @@ namespace iProlog
                 P -> ppCode();
                 E = new Engine(fname0);
                 pp((void*)"RUNNING");   
-                start = std::chrono::high_resolution_clock::now(); // start the clock().
+                clock_t begin = clock(); // start the clock().
                 E->run();
-                end = std::chrono::high_resolution_clock::now(); // End of our timer
-                std::chrono::duration<double> diff = end-start;
-                cout << "TIME TAKEN TO RUN =" << diff.count ()/ 100000.0 << " SECONDS " << endl;   
+                clock_t end = clock(); // End of our timer
+                double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+                cout << "TIME TAKEN TO RUN =" << elapsed_secs << " SECONDS " << endl;   
             }  
     };
 }
