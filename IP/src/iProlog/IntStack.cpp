@@ -7,8 +7,7 @@ Compiled and tested on 09/21/2017.
 ==================================================================
 */
 
-#include "IntStack.h"
-#include "random.cpp"
+#include "IntStack.h" 
 #include <iostream>
 #include <string.h>
 #include <vector>
@@ -82,7 +81,9 @@ namespace iProlog{
         return stack[i];
     }
 
-    void IntStack::set(const int i, const int val) {
+    void IntStack::set(const int i, const int val) { 
+        if(val == -3)
+            cout<< this << " ************************************\n";
         stack[i] = val;
     }
 
@@ -154,46 +155,63 @@ namespace iProlog{
          }
         return oss.str();
     }
+    
+    IntStack::IntStack(IntStack &other){ // Copy constructor (deep copy)
+         stack =  other.stack;
+         top = other.top;
+    }
+
+    IntStack& IntStack::operator=(const IntStack&other){
+        if( this == &other) return *this;
+        else{
+             stack =  other.stack;
+             top = other.top;
+        }
+    }
+
+    IntStack::~IntStack(){
+        stack.empty();
+    } 
 }
     /*
     Driver functions to test IntStack.cpp (09/18/2017)
     ***********************************************
     */
-    int main(){
-        int n = 7777;
-        n = iProlog::random(n);
-        iProlog::IntStack* stackValues = new iProlog::IntStack(n);
-        cout << "Is stack Empty? " << stackValues -> isEmpty() << endl;
-        n = iProlog::random(n);
-        stackValues->push(n);
-        cout << "Value of 'Top' in stack is: " << stackValues -> getTop() << endl;
-        n = iProlog::random(n);
-        stackValues -> push(n);
-        cout << "Set Top of stack: " << stackValues -> setTop(2) << endl;
-        n = iProlog::random(n);
-        stackValues -> push(n);
-        cout << "Element that is popped out: " << stackValues ->pop() << endl; 
-        cout << "Element at index 1 is: " <<  stackValues ->get(1) << endl;
-        n = iProlog::random(n);
-        stackValues -> set(2,n);
-        cout << "Element in the stack in Normal Order: " <<  stackValues -> toString() << endl;
-        stackValues -> reverse();
-        cout << "Element in the stack in reverse Order: " <<  stackValues -> toString() << endl;
-        n = iProlog::random(n);
-        stackValues -> push(n);
-        n = iProlog::random(n);
-        stackValues -> push(n);
-        n = iProlog::random(n);
-        stackValues -> push(n);
-        cout << "Current stack elements after calling expand(): " <<  stackValues -> toString() << endl;
-        for(int i = 0; i < 4; i++){
-		    stackValues -> pop();
-        }    
-        cout << "Current stack elements after calling shrink(): " <<  stackValues -> toString() << endl;
-        stackValues -> clear();
-        cout << "Size of stack after clearing is: " << stackValues -> size() << endl;
-        return 0;
-    }
+    // int main(){
+    //     int n = 7777;
+    //     n = iProlog::random(n);
+    //     iProlog::IntStack* stackValues = new iProlog::IntStack(n);
+    //     cout << "Is stack Empty? " << stackValues -> isEmpty() << endl;
+    //     n = iProlog::random(n);
+    //     stackValues->push(n);
+    //     cout << "Value of 'Top' in stack is: " << stackValues -> getTop() << endl;
+    //     n = iProlog::random(n);
+    //     stackValues -> push(n);
+    //     cout << "Set Top of stack: " << stackValues -> setTop(2) << endl;
+    //     n = iProlog::random(n);
+    //     stackValues -> push(n);
+    //     cout << "Element that is popped out: " << stackValues ->pop() << endl; 
+    //     cout << "Element at index 1 is: " <<  stackValues ->get(1) << endl;
+    //     n = iProlog::random(n);
+    //     stackValues -> set(2,n);
+    //     cout << "Element in the stack in Normal Order: " <<  stackValues -> toString() << endl;
+    //     stackValues -> reverse();
+    //     cout << "Element in the stack in reverse Order: " <<  stackValues -> toString() << endl;
+    //     n = iProlog::random(n);
+    //     stackValues -> push(n);
+    //     n = iProlog::random(n);
+    //     stackValues -> push(n);
+    //     n = iProlog::random(n);
+    //     stackValues -> push(n);
+    //     cout << "Current stack elements after calling expand(): " <<  stackValues -> toString() << endl;
+    //     for(int i = 0; i < 4; i++){
+	// 	    stackValues -> pop();
+    //     }    
+    //     cout << "Current stack elements after calling shrink(): " <<  stackValues -> toString() << endl;
+    //     stackValues -> clear();
+    //     cout << "Size of stack after clearing is: " << stackValues -> size() << endl;
+    //     return 0;
+    // }
     
 /*
     JAVA OUTPUT:

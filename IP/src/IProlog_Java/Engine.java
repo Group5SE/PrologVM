@@ -1,3 +1,4 @@
+
 /*
 *author: keerthana Sadam; Date: 12/03/2017
 *Included test cases which checks all functions
@@ -1056,3 +1057,59 @@ class Engine {
 	  obj.run();
 }
 }
+
+//   public static void main(String[] args) {
+	  
+// 	  final String fname = "E:/Software Engineering/Term Project Clone/IP/test/test_tokenizer/perms.pl.nl" ;
+// 	  Engine obj = new Engine(fname);
+// 	  System.out.println("Heap:"+ Arrays.toString(obj.heap));
+// 	  System.out.println("Heap length:" + obj.heap.length);
+// 	  System.out.println("Clauses Array: "+ Arrays.toString(obj.clauses));
+// 	  System.out.println("Int Clause Array with elements equal to 'Clause' :" + Arrays.toString(obj.cls));
+// 	/* System.out.println("symbol map values:"+ obj.syms.values());
+// 	  System.out.println("symbol map keys:"+ obj.syms.keySet());*/
+// 	  System.out.println("Symbol map:" + obj.syms);
+// 	  System.out.println("Symbol List:" + obj.slist);
+// 	  System.out.println("Spine Query:" + obj.query);
+// 	  System.out.println("ObStack Spine:"+(obj.spines));
+// 	  System.out.println("IMap array of Integer: "+ Arrays.toString(obj.imaps));
+// 	  System.out.println("IntMap array:"+ Arrays.toString(obj.vmaps));
+// 	  obj.run();
+// }
+
+/*
+  JAVA OUTPUT:
+  
+  add.pl.nl:
+
+  Heap length:32768
+  Clauses Array: [iProlog.Clause@15db9742, iProlog.Clause@6d06d69c, iProlog.Clause@7852e922]
+  Int Clause Array with elements equal to 'Clause' :[0, 1, 2]
+  Symbol map:{add=0, s=1, goal=2}
+  Symbol List:[add, s, goal]
+  Spine Query:iProlog.Spine@4e25154f
+  ObStack Spine:[iProlog.Spine@4e25154f]
+  IMap array of Integer: null
+  IntMap array:[{}, {}, {}]
+  [0] *** ANSWER=[goal, [s, [s, [s, [s, 0]]]]]
+  TOTAL ANSWERS=1
+
+  perms.pl.nl:
+  
+Heap length:32768
+Clauses Array: [iProlog.Clause@15db9742, iProlog.Clause@6d06d69c, iProlog.Clause@7852e922, iProlog.Clause@4e25154f, iProlog.Clause@70dea4e, iProlog.Clause@5c647e05, iProlog.Clause@33909752, iProlog.Clause@55f96302, iProlog.Clause@3d4eac69, iProlog.Clause@42a57993, iProlog.Clause@75b84c92]
+Int Clause Array with elements equal to 'Clause' :[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Symbol map:{eq=0, sel=1, list=2, perm=3, nil=4, app=5, nrev=6, input=7, goal=8}
+Symbol List:[eq, sel, list, perm, nil, app, nrev, input, goal]
+Spine Query:iProlog.Spine@6bc7c054
+ObStack Spine:[iProlog.Spine@6bc7c054]
+IMap array of Integer: null
+IntMap array:[{}, {}, {}]
+[0] *** ANSWER=[goal, [list, 11, [list, 10, [list, 9, [list, 8, [list, 7, [list, 6, [list, 5, [list, 4, [list, 3, [list, 2, [list, 1, nil]]]]]]]]]]]]
+TOTAL ANSWERS=1
+
+*/
+
+
+}
+

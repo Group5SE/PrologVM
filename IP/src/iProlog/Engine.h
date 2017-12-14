@@ -21,12 +21,13 @@ Written on 11/11/2017
 #include "Spine.h"
 #include "Clause.h"
 #include "IntList.h"
+#include "boost/any.hpp"
 
 namespace iProlog{
 	// Implements execution mechanism
 	class Engine
 	{
-		private:
+		public:
 			std::vector<std::string> slist;
 			/** runtime areas:
 			 *
@@ -47,12 +48,13 @@ namespace iProlog{
 			 * vmaps: contains clause numbers for which vars occur in indexed arg positions
 			*/
 
- 	    	std::vector<int> heap;
  	 		int top = 0;
 			int MINSIZE = 1 << 15; // power of 2
+			int* heap;
+			int heapSize;
 			IntStack *trail;
 			IntStack *ustack; 
-			ObStack<Spine*>* spines = new ObStack<Spine*>();
+			ObStack<Spine>* spines = new ObStack<Spine>();
 			/**
 			 * tags of our heap cells - that can also be seen as
 			 * instruction codes in a compiled implementation
@@ -98,10 +100,12 @@ namespace iProlog{
 			void clear();
 			void push(const int i);
 			int size();
+			void printUnorderedMap(std::map<std::string, IntStack*> map);
+			void printMap(std::map<std::string, int>  map);
 			void expand();
 			void ensureSize(const int more);
-			std::vector<std::vector<std::string>>* maybeExpand(std::vector<std::string> Ws);
-			std::vector<std::vector<std::string>>* mapExpand(std::vector<std::vector<std::string>> Wss);
+			std::vector<std::vector<std::string>> maybeExpand(std::vector<std::string> &Ws);
+			std::vector<std::vector<std::string>> mapExpand(std::vector<std::vector<std::string>> &Wss);
 			std::vector<Clause*> dload(std::string s);
 			int encode(const int  t,std::string s);
 			int relocate(int const b, int const cell);
@@ -112,13 +116,9 @@ namespace iProlog{
 			void unwindTrail(int savedTop);
 			int deref(int x);
 			std::string showCell(int w);
-			template <typename T>
-			T* exportTerm(int x); 
-			template<typename T>
-			void showTerm(int x);
-			template<typename T>
-			void showTerm(const T& O);
-			template<typename T>
+			std::vector<std::string> exportTerm(int x); 
+			void showTerm(int x); 
+			void showTerm(std::vector<std::string> O); 
 			void ppTrail();
 			std::vector<int> getSpine(std::vector<int> cs);
 			std::string showCells(int const base, int const len);
@@ -141,14 +141,17 @@ namespace iProlog{
 			bool hasGoals(Spine* S);
 			Clause* putClause(std::vector<int> cs, std::vector<int> gs, int const neck);
 			void popSpine();
-			Spine* yield();
-			template <typename T>
-			T* ask();
-			template <typename T>
+			Spine* yield(); 
+			std::vector<std::string> ask(); 
+			std::string convertToString(std::vector<std::string>);
 			void run();
 			std::vector<IntMap*> vcreate(int const l);
 			void put(std::vector<IMap<int>*> imaps, std::vector<IntMap*> vss, std::vector<int> keys, int const val);
 			std::vector<IMap<int>*>* index(std::vector<Clause*> clauses, std::vector<IntMap*> vmaps);
+			template<typename K>  
+			static void printVector(std::vector<K>, bool flag);
+			template<typename K>  
+			static void printVector(std::vector<K>, int limit);
 	};
 }
 #endif

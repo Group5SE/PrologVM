@@ -24,15 +24,27 @@ namespace iProlog{
     }
 
     bool IntList::isempty(IntList *Xs){ // C++ grammar defines static to be declared only once inside class. 
-        return NULL == Xs -> tail;
+        if(Xs == NULL) return true; 
+        return false;
     }
 
     int IntList::getHead( IntList *Xs){
+        if(Xs != NULL)
         return Xs -> head;
+        return 0;
     }
 
     IntList* IntList::getTail( IntList *Xs) {
-        return &(*Xs ->tail);
+        if(Xs == NULL)
+        { 
+            return NULL;
+        }
+        else if( Xs -> tail == NULL)
+        { 
+            return NULL;
+        }   
+        IntList* Ys = &(*Xs -> tail); 
+        return Ys;
     }
 
     IntList* IntList::cons( int X,  IntList *Xs) {
@@ -54,8 +66,9 @@ namespace iProlog{
     IntStack* IntList::toInts(IntList* Xs){
         IntStack* is = new IntStack();
         while (!isempty(Xs)) {
-            is -> push(getHead(Xs));   
-            Xs = getTail(Xs);  
+             is -> push(getHead(Xs));  
+             if(getTail(Xs) == NULL) break; 
+             Xs = getTail(Xs);  
             if(Xs -> tail == NULL)
                 is -> push(getHead(Xs));
         }
@@ -91,24 +104,28 @@ namespace iProlog{
     ***********************************************
     
     */
-    int main(int argc, char  *argv[]) {
-        int n = 23456, n1 , n2 , n3; 
-        n = iProlog::random(n);
-        iProlog::IntList *headEle = new iProlog::IntList(n); 
-        n = iProlog::random(n);
-        iProlog::IntList *curList = new iProlog::IntList(n, headEle); 
-        cout << "Element in list are: "<<  curList -> toString() << endl;
-        cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
-        cout << "Tail Element in list: "<<  iProlog::IntList::getTail(curList)->head << endl;
-        cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
-        n = iProlog::random(n);
-        cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(n, curList) -> toString() << endl;
-        n1 = iProlog::random(n);
-        n2 = iProlog::random(n1);
-        n3 = iProlog::random(n2);
-        cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {n1 , n2, n3}, curList) -> toString();
-        return 0;
-    }
+    // int main(int argc, char  *argv[]) {
+    //     int n = 23456, n1 , n2 , n3; 
+    //     n = iProlog::random(n);
+    //     iProlog::IntList* s = NULL;
+    //     iProlog::IntList *headEle = new iProlog::IntList(n); 
+    //     n = iProlog::random(n);
+    //     iProlog::IntList *curList = new iProlog::IntList(n, headEle); 
+    //     cout << "Element in list are: "<<  curList -> toString() << endl;
+    //     cout << " IS EMPTY ? " << iProlog::IntList::isempty(s) << endl;
+    //     cout << "Head Element in list: "<<  iProlog::IntList::getHead(curList) << endl;
+    //     cout << "Tail Element in list: "<<  iProlog::IntList::getTail(headEle)<< endl;
+    //     cout << "Length of list: "<<  iProlog::IntList::len(curList)<< endl;
+    //     n = iProlog::random(n);
+    //     cout << "New List after adding one element using cons(): " <<  iProlog::IntList::cons(n, curList) -> toString() << endl;
+    //     n1 = iProlog::random(n);
+    //     n2 = iProlog::random(n1);
+    //     n3 = iProlog::random(n2);
+    //     cout << "New List after adding array of elements: " << iProlog::IntList::app(vector<int> {n1 , n2, n3}, curList) -> toString() << "\n";
+    //     delete s;
+    //     delete headEle;
+    //     return 0;
+    // }
 /*
     UNIT TESTING 
     JAVA OUTPUT:

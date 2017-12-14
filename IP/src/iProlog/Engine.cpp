@@ -1,12 +1,11 @@
 /*
 ==============================================================================================
 Author: Karthik Venkataramana Pemmaraju.
-Compilation: g++ Engine.cpp -std=c++11 -c 
+Compilation:g++ Engine.cpp IntStack.cpp IntList.cpp IMap.cpp IntMap.cpp ObStack.cpp Spine.cpp Clause.cpp -std=c++11 -c
 Written on 11/25/2017
 ===============================================================================================
 */
 
-#include <stdexcept> 
 #include "IntStack.h"
 #include "ObStack.h"
 #include "IntMap.h"
@@ -15,12 +14,16 @@ Written on 11/25/2017
 #include "Clause.h"
 #include "IntList.h"
 #include "Engine.h"
+#include "Toks.h" 
 #include <string> 
 #include <map> 
 #include <iterator>
 #include <vector>
+#include <stdexcept> 
+#include <stdlib.h>     /* realloc, free, exit, NULL */
 
 using namespace std;
+using namespace boost;
 namespace iProlog{
 
 	int Engine::tag(const int t, const int w){
@@ -40,13 +43,17 @@ namespace iProlog{
 	int Engine::addSym(std::string sym){
 		std::map<std::string, int>::iterator itr;
 		itr = syms.find(sym);
-		int value = itr -> second;
-		if (value == 0){ // If value is not found, then do ...
-			const int i = syms.size();
-			syms.insert(std::pair <string, int> (sym, i));
-			slist.push_back(sym);
+		int i = 0;
+		if(itr == syms.end()){
+			i = syms.size();
+			syms.insert({sym, i});
+			slist.push_back(sym); 
 		}
-		return value;
+		else
+		{
+			i = itr -> second;
+		}
+		return i;
 	}
 	
 	/**
@@ -64,12 +71,13 @@ namespace iProlog{
   	}
   
 	void Engine::makeHeap(const int size){
-		heap = std::vector<int>(size);
+		heap = (int*) malloc(size * sizeof(int));
+		heapSize = size;
 		clear();
   	}
 
 	int Engine::getTop(){
-		return top;
+		return this -> top;
 	}
 
 	int Engine::setTop(const int top){
@@ -92,23 +100,21 @@ namespace iProlog{
 	 * dynamic array operation: doubles when full
 	*/
 	void Engine::expand(){
-		const int l = heap.size();
-		std::vector<int> newstack(l << 1);
-		newstack.assign(heap.begin() , heap.begin() +l);
-		heap = newstack;
+		heap = (int *)realloc(heap, heapSize << 1);
+		heapSize = heapSize << 1; 
 	}
 
-	void Engine::ensureSize(const int more){
-		if (1 + top + more >= heap.size())
+	void Engine::ensureSize(const int more){  
+		if (1 + top + more >= heapSize)
 			expand();
 	}
 
-	std::vector<std::vector<std::string>>* Engine::maybeExpand(std::vector<std::string> Ws){
+	std::vector<std::vector<std::string>> Engine::maybeExpand(std::vector<std::string> &Ws){
 		const int l = Ws.size();
-		std::vector<std::vector<std::string>> *Rss; // ArrayList<String[]>
+		std::vector<std::vector<std::string>> Rss; // ArrayList<String[]>
 		const std::string W = Ws[0];
 		if (W.length() < 2 || "l:" != W.substr(0, 2))
-	 	 	return nullptr;
+	 	 	return Rss;
 		std::string V = W.substr(2);
 		for (int i = 1; i < l; i++){
 			std::vector<std::string> Rs(4);
@@ -118,7 +124,7 @@ namespace iProlog{
 			Rs[1] = "c:list";
 			Rs[2] = Ws[i];
 			Rs[3] = i == l - 1 ? "c:nil" : "v:" + Vii;
-			Rss -> push_back(Rs);
+			Rss.push_back(Rs);
 		}
 		return Rss;
 	}
@@ -126,21 +132,21 @@ namespace iProlog{
 	/**
 	 * expands, if needed, "lists" statements in sequence of statements
 	*/
-	std::vector<std::vector<std::string>>* Engine::mapExpand(std::vector<std::vector<std::string>> Wss){
-		std::vector<std::vector<std::string>>* Rss;
+	std::vector<std::vector<std::string>> Engine::mapExpand(std::vector<std::vector<std::string>> &Wss){
+		std::vector<std::vector<std::string>> Rss;
 		std::vector<std::vector<std::string>>::iterator Ws;
-		for (Ws= Wss.begin(); Ws < Wss.end(); Ws++){
-			std::vector<std::vector<std::string>> *Hss = maybeExpand(*Ws);
-			if (nullptr == Hss){
-    			std::vector<std::string> ws = std::vector<std::string>(Ws -> size());
-				for (int i = 0; i < ws.size(); i++){
-						ws[i] = Ws -> at(i);
-				}
-				Rss -> push_back(ws);
+		for (Ws= Wss.begin(); Ws != Wss.end(); Ws++){ 
+			std::vector<std::vector<std::string>> Hss = maybeExpand(*Ws);
+			std::vector<std::string> ws;
+			if (Hss.size() == 0){ 
+				for (int i =0; i < Ws->size(); i++){
+						 ws.push_back((*Ws)[i]);
+				} 
+				Rss.push_back(ws); 
 			}
 			else{
-				for (std::vector<std::vector<std::string>>::const_iterator X = Hss -> begin(); X < Hss -> end(); X++){
-					Rss -> push_back(*X);
+				for (std::vector<std::vector<std::string>>::const_iterator X = Hss.begin(); X < Hss.end(); X++){
+					Rss.push_back(*X);
 				}
 			}
 		}
@@ -152,127 +158,155 @@ namespace iProlog{
    	* "natural language" equivalents of Prolog/HiLog statements
    	*/
 	std::vector<Clause*> Engine::dload(std::string s){
-		const bool fromFile = true;
-		// std::vector<std::vector<std::vector<std::string>>> Wsss = Toks::toSentences(&s, fromFile); (TO - DO on linux).
-		std::vector<std::vector<std::vector<std::string>>> Wsss;
+		const bool fromFile = true; 
+		Toks t;
+		std::vector<std::vector<std::vector<std::string>>> Wsss = t.toSentences(s, fromFile); // (TO - DO on linux).
 		std::vector<Clause*> Cs;
-		for (std::vector<std::vector<std::vector<std::string>>>::iterator Wss = Wsss.begin(); Wss != Wsss.end(); ++Wss){
+		for (auto Wss = Wsss.begin(); Wss != Wsss.end(); ++Wss){
 			// clause starts here
-			std::unordered_map<std::string, IntStack*> refs;
+			std::map<std::string, IntStack*> refs; 
 			IntStack *cs = new IntStack();
 			IntStack *gs = new IntStack(); 
-			std::vector<std::vector<std::string>> *Rss = mapExpand(*Wss);
+			std::vector<std::vector<std::string>> Rss = mapExpand(*Wss);
 			int k = 0;
-		 	for(std::vector<std::vector<std::string>>::iterator ws= Rss -> begin(); ws != Rss -> end(); ++ws){
+		 	for(std::vector<std::vector<std::string>>::iterator ws= Rss.begin(); ws != Rss.end(); ++ws){
 				// head or body element starts here
-				const int l = ws-> size();
+				const int lm = ws-> size();
 				gs->push(tag(R, k++));
-				cs->push(tag(A, l));
+				cs->push(tag(A, lm));
 				for (std::vector<std::string>::iterator w = ws -> begin(); w != ws -> end(); ++w){
+					
 					// head or body subterm starts here
 					if (1 == w ->size()){ 
 						*w = "c:" + *w;
 					}
 					std::string L = w ->substr(2);
-					switch (w -> at(0)){
+					std::map<std::string, IntStack*>::iterator itr1 = refs.find(L);
+					std::map<std::string, IntStack*>::iterator itr = refs.find(L);
+					IntStack* Is;  
+					char c = w -> at(0);  
+					switch (c){
 						case 'c':
-							cs -> push(encode(C, L));
+							cs -> push(encode(C, L));  
 							k++;
 							break;
 						case 'n':
 							cs -> push(encode(N, L));
 							k++;
 							break;
-						case 'v':
-							{
-							std::unordered_map<std::string, IntStack*>::iterator itr = refs.find(L);
-							IntStack *Is = itr -> second; // returns map value.
-							if (nullptr == Is){
-								Is = new IntStack(); // NECESSARY?
-								refs.insert({L, Is}); // puts into hash map.
-							}
-							Is->push(k);
-							cs->push(tag(BAD, k)); // just in case we miss this
-							k++;
-							}
-						 	break;
-						case 'h':
-							{
-							std::unordered_map<std::string, IntStack*>::iterator itr = refs.find(L);
-							IntStack *Is = itr -> second;
-							if (nullptr == Is){
-								Is = new IntStack(); // NECESSARY?
-								refs.insert({L, Is}); // puts into hash map.
-							}
-							Is->push(k - 1);
-							cs->set(k - 1, tag(A, l - 1));
-							gs->pop();
-							}
+						case 'v': 
+								// printUnorderedMap(refs);
+								// KEY EXISTS;  
+									if( itr == refs.end())
+									{
+											Is = new IntStack(); // NECESSARY?
+											refs.insert({L, Is}); // puts into hash map.
+									}
+									else{
+										 	Is = itr -> second; 
+									}
+											Is->push(k); 
+											cs->push(tag(BAD, k)); // just in case we miss this
+											k++;	
+								
+						 	 break;
+						case 'h': 
+								//	IntStack *Is; 
+								if(itr1 == refs.end())
+								{ 
+										Is = new IntStack(); // NECESSARY?
+										refs.insert({L, Is}); // puts into hash map.
+								}
+								else{
+										 	Is = itr1 -> second;
+										// cout << " IS ) VALUES " << Is -> getTop() << " K " << k << endl;
+								} 
+									Is->push(k - 1); 
+									cs->set((k - 1), tag(A, (lm - 1)));
+									gs->pop(); 
+
 							break;
 						default:
 							std::cout << " FORGOTTEN= " <<  *w ;
-					} // end subterm
-				} // end element
-		  	} // end clause	
-		// linker
+						 } // end subterm 
+		 			} // end element
+		   	} // end clause	
+		// // linker 
+
 		for(auto &itr: refs){
-			IntStack* Is = itr.second;
-			// finding the A among refs
+			IntStack* Is = itr.second; 
 			int leader = -1;
-			for (auto &j: Is -> toArray()){
+			for (auto &j: Is -> toArray()){ 
 				if (A == tagOf(cs->get(j))){
 					leader = j;
 					break;
-			  	}
+				}
+					  
 			}
-			if (-1 == leader){
+			if (leader == -1){
 				// for vars, first V others U
-			  	leader = Is -> get(0);
-			  	for (auto &i: Is -> toArray()){
+				leader = Is -> get(0);
+			  	for (auto &&i: Is -> toArray()){  
 					if (i == leader)
-						cs->set(i, tag(V, i));
-					else{
-						cs->set(i, tag(U, leader));
+						{
+							cs->set(i, tag(V, i)); 
+						}
+					else{ 
+						cs->set(i, tag(U, leader)); 
 					}
 				 }
 			}
 			else{
-				for (auto &i: Is -> toArray()){
+				for (auto &&i : Is -> toArray()){ 
 					if (i == leader)
 						continue;	
-					cs->set(i, tag(R, leader));
+					cs->set(i, tag(R, leader)); 
 				}
 			} 
 		}
-		const int neck = 1 == gs->size() ? cs->size() : detag(gs->get(1));
+
+		const int neck = 1 == gs->size() ? cs->size() : detag(gs->get(1)); 
 		std::vector<int> tgs = gs->toArray();
-		Clause* C = putClause(cs->toArray(), tgs, neck); // (TO - DO)
+		Clause* C = putClause(cs->toArray(), tgs, neck); 
 		Cs.push_back(C);
 		} // end clause set
-		const int ccount = Cs.size();
+		const int ccount = Cs.size(); 
 		std::vector<Clause*> cls(ccount);
 		for (int i = 0; i < ccount; i++){
 			cls[i] = Cs[i];
-		}
+		} 
 		return cls; 
 	}
+ 
+	void Engine::printMap(std::map<std::string, int>  map){  
+		cout << "{";
+		for(auto t =  map.begin(); t != map.end(); ++t){  
+				cout << "[" << t -> first << ", " << t -> second<< "], ";
+			}
+		cout << "}";
+	}
+	
+
+
 	/*
 	 * encodes string constants into symbols while leaving
 	 * other data types untouched
 	*/
-	int Engine::encode(const int  t,std::string s){
+	int Engine::encode(const int t,std::string s){
 		int w;
 		try{
-		  w = std::stoi(s);
+		  w = std::stoi(s); 
 		}
 		catch (const std::exception &e)
-		{
-		  if (C == t)
-			w = addSym(s);
-		  else
-			//pp("bad in encode=" + t + ":" + s);
+		{ 
+		  if (C == t){
+			w = addSym(s);  
+			}
+		  else{
 			return tag(BAD, 666);
-		}
+			}
+			//pp("bad in encode=" + t + ":" + s);
+		} 
 		return tag(t, w);
 	}
  
@@ -290,7 +324,7 @@ namespace iProlog{
 	}
 
 	int Engine::relocate(int const b, int const cell){
- 		return tagOf(cell) < 3 ? cell + b : cell;
+ 		return (tagOf(cell) < 3) ? (cell + b) : cell;
 	}
 	
 	std::vector<int> Engine::toNums(std::vector<Clause*> clauses){
@@ -357,44 +391,54 @@ namespace iProlog{
    	  * representing a term for interaction with an external function
    	  * including a displayer
    	*/
-	template <typename T>
-	T* Engine::exportTerm(int x){
+	/**
+   	  * builds an array of embedded arrays from a heap cell
+   	  * representing a term for interaction with an external function
+   	  * including a displayer
+   	*/
+	vector<string> Engine::exportTerm(int x){
 		x = deref(x);
 		const int t = tagOf(x);
 		const int w = detag(x);
-		T res = nullptr;
-		switch(t){
-		  	case Engine::C:
-				res = getSym(w);
-		 	 	break;
-			case Engine::N:
-				res = w; // res = new Integer(w) ( Thought this is the way of doing this.).
-		 		break;
-		  	case Engine::V: 
-				res = "V" + std::to_string(w);
-		  		break;
-		  	case Engine::R:
-		  		{
-					int a = heap[w];
-					if (A != tagOf(a)){
-						return "*** should be A, found=" + showCell(a);
-					}
-					int n = detag(a);
-					std::vector<T> arr(n);
-					int k = w + 1;
-					for (int i = 0; i < n; i++){
-						const int j = k + i;
-						arr[i] = exportTerm<T>(heap[j]);
-					}
-					res = arr;
-		  		}
-		  		break;
-		  	default:
-				res = "*BAD TERM*" + showCell(x);
+		string res; 
+		if(t == Engine::C){
+				res = "" + getSym(w);
 		}
-		return &res;
+		else if(t == Engine::N)
+				res = "" + std::to_string(w) ; // res = new Integer(w) ( Thought this is the way of doing this.)
+		else if(t == Engine::V) 
+				res = "V" + std::to_string(w) ; 
+		else if(t == Engine::R){
+				int a = heap[w];
+				if (A != tagOf(a)){
+					return {"*** should be A, found=" + showCell(a)};
+				}
+				int n = detag(a);
+				std::vector<string> arr(n);
+				int k = w + 1;
+				for (int i = 0; i < n; i++){
+						const int j = k + i; 
+						if(i  < n - 1)
+							arr[i] =  convertToString(exportTerm(heap[j]));
+						else
+							arr[i] = "("+ convertToString(exportTerm(heap[j])) +  ")" ;
+					}
+				return arr;
+		}
+		else  
+				res = "*BAD TERM*" + showCell(x);
+		return {res};
 	}
- 
+	
+	string Engine::convertToString(std::vector<string> x){
+		string res; 
+		for(auto &i: x)
+		{
+			res += i ;
+		}   
+		return res;
+	}
+
 	std::string Engine::showCell(int w){
 		const int t = tagOf(w);
 		int val = detag(w);
@@ -420,25 +464,24 @@ namespace iProlog{
 	// Not Sure if this is correct, peer review required! (ATTENTION!!!!!!!)
 	/**
    	* raw display of a term - to be overridden
-   	*/
-	template<typename T>
+   	*/ 
 	void Engine::showTerm(int x){
-		showTerm<T>(exportTerm<T>(x));
+		showTerm(exportTerm(x));
 	}
   
 	/**
    	* raw display of a externalized term
-   	*/
-	template<typename T>
-	void Engine::showTerm(const T& O){
-		cout << O; // Print the object value here itself.
+   	*/ 
+	void Engine::showTerm(vector<string> O){ 
+		 printVector(O, false);
+		// cout << O -> toString(); // Print the object value here itself.
 	}
-
-	template<typename T>
+ 
 	void Engine::ppTrail(){
 		for (int i = 0; i <= trail -> getTop(); i++){
 		  const int t = trail -> get(i);
-		  cout << "trail[" + std::to_string(i) + "]=" + showCell(t) + ":" + showTerm<T>(t);
+			cout << "trail[" << std::to_string(i) << "]=" << showCell(t) << ":";
+			// showTerm(t);
 		}
 	}
 
@@ -465,6 +508,7 @@ namespace iProlog{
 		} 
 		return rs;
 	} 
+
 
 	/**
    	* raw display of a cell as tag : value
@@ -496,8 +540,9 @@ namespace iProlog{
    	 * to trail bindigs below a given heap address "base"
 	*/
 	
-	bool Engine::unify(int const base){
+	bool Engine::unify(int const base){  
 		while (!ustack -> isEmpty()){
+ 
 		  const int x1 = deref(ustack -> pop());
 		  const int x2 = deref(ustack -> pop());
 		  if (x1 != x2){
@@ -564,6 +609,7 @@ namespace iProlog{
 	void Engine::pushCells(int const b, int const from, int const to, int const base){
 		ensureSize(to - from);
 		for (int i = from; i < to; i++){
+		
 		  push(relocate(b, heap[base + i]));
 		}
 	}
@@ -573,7 +619,7 @@ namespace iProlog{
 	*/  
 	void Engine::pushCells(int const b, int const from, int const to, vector<int> cs){
 		ensureSize(to - from);
-		for (int i = from; i < to; i++){
+		for (int i = from; i < to; i++){ 
 		  push(relocate(b, cs[i]));
 		}
 	}
@@ -616,19 +662,17 @@ namespace iProlog{
 		  return;
 		}
 		const int p = 1 + detag(goal);
-		const int n = std::min(MAXIND, detag(getRef(goal)));
-		std::vector<int> xs(MAXIND);
+		const int n = std::min(MAXIND, detag(getRef(goal))); 
+		G -> xs.resize(MAXIND);
 		for (int i = 0; i < n; i++)
 		{
 		  const int cell = deref(heap[p + i]);
-		  xs[i] = cell2index(cell);
-		}
-		G->xs = xs;
+		  G -> xs[i] = cell2index(cell);
+		} 
 		if (imaps.size() == 0)
 		  return;
-		iProlog::IMap<int> iM;
-		std::vector<int> cs = iM.get(imaps, vmaps, xs);
-		G->cs = cs;
+		IMap<int> iM;
+		G -> cs  = iM.get(imaps, vmaps, G -> xs);  
 	}
 	
 	int Engine::cell2index(int const cell){
@@ -679,46 +723,46 @@ namespace iProlog{
 	 * unifies with it - in which case places the goals of the
 	 * clause at the top of the new list of goals, in reverse order
 	*/
-	Spine* Engine::unfold(Spine* G){
+	Spine* Engine::unfold(Spine* G){ 
 		const int ttop = trail->getTop();
 		const int htop = getTop();
 		const int base = htop + 1;
 		const int goal = IntList::getHead(G->gs);
+		//cout << "TTOP G" << G -> ttop << " BASE " << G -> base << " GOAL " << goal << " G GS "  << G-> gs->toString();
 		makeIndexArgs(G, goal);
 		const int last = G -> cs.size();
-		for (int k = G->k; k < last; k++){
+		for (int k = G->k; k < last; k++){ 
 		Clause* C0 = clauses[G->cs[k]];
 		if (!match(G->xs, C0))
-		{
+		{  
 			continue;
 		}
-		  const int base0 = base - C0->base;
+		  const int base0 = base - (C0->base);
 		  const int b = tag(V, base0);
 		  const int head = pushHead(b, C0);
 
 		  ustack->clear(); // set up unification stack
-
 		  ustack->push(head);
-		  ustack->push(goal);
-
+		  ustack->push(goal); 
 		  if (!unify(base))
-		  {
+		  {   
 			unwindTrail(ttop);
 			setTop(htop);
 			continue;
 		  }
 		  std::vector<int> gs = pushBody(b, head, C0);
-		  IntList* newgs = IntList::getTail(IntList::app(gs, IntList::getTail(G->gs)));
-		  G->k = k + 1;
-		  if (!IntList::isempty(newgs))
-		  {
-			return new Spine(gs, base, IntList::getTail(G->gs), ttop, 0, cls);
-		  }
-		  else
-		  {
-			return answer(ttop);
-		  }
+			IntList* newgs = nullptr;
+			newgs = IntList::getTail(IntList::app(gs, IntList::getTail(G->gs))); 
+			G->k = k + 1;  
+		  if(!(newgs == nullptr)){ 
+				return new Spine(gs, base, IntList::getTail(G->gs), ttop, 0, cls);
+			}
+		  else{   
+			  return answer(ttop);
+			}
+
 		} // end for
+
 		return nullptr;
 	  }
 
@@ -726,8 +770,10 @@ namespace iProlog{
      * extracts a query - by convention of the form
      * goal(Vars):-body to be executed by the engine
     */ 
-	Clause* Engine::getQuery(){
-		return clauses[clauses.size() - 1];
+	Clause* Engine::getQuery(){  
+		if(clauses.size() >= 1)
+			return clauses[clauses.size() - 1];
+		return NULL;
 	}
 
 	/**
@@ -735,35 +781,42 @@ namespace iProlog{
     * query from which execution starts
 	*/
 	Spine* Engine::init(){	
-		IntList* ptr;
+	
 		const int base = size();
 		Clause* G = getQuery();
-		Spine* Q = new Spine(G->hgs, base, ptr -> empty, trail->getTop(), 0, cls);
-		spines -> push(Q);
-		return Q;
+		if(G != NULL){ 
+			Spine* Q = new Spine(G->hgs, base, NULL , trail->getTop(), 0, cls); 
+			spines -> push(Q);	 
+			return Q;
+		} 
+		return nullptr;
 	}
 	/**
      * returns an answer as a Spine while recording in it
      * the top of the trail to allow the caller to retrieve
      * more answers by forcing backtracking
     */
-   	Spine* Engine::answer(int const ttop){
-		return new Spine(spines ->top()-> hd, ttop); // ATTTENNNNNNNNNTIOOOOOOOOOOOOOONNNNNNNN!!!!!!!!
-	}
+   	Spine* Engine::answer(int const ttop){ 
+			if(spines->elems.size() > 0)
+				return new Spine(spines ->elems.at(0)-> hd, ttop); // ATTTENNNNNNNNNTIOOOOOOOOOOOOOONNNNNNNN!!!!!!!!
+			return nullptr;
+		}
 
  	/**
      * detects availability of alternative clauses for the
      * top goal of this spine
     */
     bool Engine::hasClauses(Spine* S){
-		return S->k < S->cs.size();
+		if(S != NULL)
+		return ((S->k) < (S->cs.size()) );
+		return false;
 	}
 
  	/**
      * true when there are no more goals left to solve
     */
 	bool Engine::hasGoals(Spine* S){
-		return !IntList::isempty(S->gs);
+		return !(S -> gs == NULL);
 	}
 
  	/**
@@ -784,25 +837,25 @@ namespace iProlog{
 	 * at a time, until the spines stack is empty - when it
 	 * returns null
 	*/
-	Spine* Engine::yield(){
-		while (!spines->empty()){
+	Spine* Engine::yield(){  
+		while (!spines->empty()){ 
 		  Spine* G = spines->top();
+ 
 		  if (!hasClauses(G)){
-			popSpine(); // no clauses left
-			continue;
+				popSpine(); // no clauses left   
+				continue;
 		  }
 		  Spine* C = unfold(G);
-		  if (nullptr == C){
-			popSpine(); // no matches
-			continue;
+		  if (C == nullptr){
+				popSpine(); // no matches   
+				continue;
 		  }
-		  if (hasGoals(C))
-		  {
-			spines->push(C);
-			continue;
-		  }
-		  return C; // answer
-		}
+		  if (hasGoals(C)){ 
+				spines->push(C);  
+				continue;
+			}  
+			return C; // answer
+		} 
 		return nullptr;
 	}
 
@@ -810,16 +863,16 @@ namespace iProlog{
      * retrieves an answers and ensure the engine can be resumed
      * by unwinding the trail of the query Spine
      * returns an external "human readable" representation of the answer
-	*/
-	template <typename T>
-	T* Engine::ask(){
-		query = yield();
+	*/ 
+	vector<string> Engine::ask(){
+		vector<string> R; 
+		query = yield(); 
 		if (nullptr == query)
 		{
-		  return nullptr;
+		  return R;
 		}
 		const int res = answer(query->ttop)->hd;
-		T* R = exportTerm<T>(res);
+		R = exportTerm(res);
 		unwindTrail(query->ttop);
 		return R;
 	}
@@ -827,27 +880,20 @@ namespace iProlog{
 	/**
    	 * initiator and consumer of the stream of answers
    	 * generated by this engine
-	*/
-	template <typename T>
+	*/ 
 	void Engine::run(){
-		long long ctr = 0;
-		for (;; ctr++){
-		  T* abc = ask<T>();
-		  if (nullptr == abc)
+		long ctr = 0;
+		for (;; ctr++){   
+		vector<string> A = ask();  
+		  if (A.size() == 0)
 		  {
-			break;
-		  }
-		  if (ctr < 5)
-		  {
-			//  Prog::println("[" + std::to_string(ctr) + "] " + "*** ANSWER=" + showTerm<T>(A));
-			;
-		  }
-		}
-		if (ctr > 5)
-		{
-			;//	Prog::println(L"...");
-		}
-		// Prog::println(L"TOTAL ANSWERS=" + std::to_wstring(ctr));
+				break;
+		  }  
+			cout << "[" + std::to_string(ctr) + "] " << "*** ANSWER = ";
+			showTerm(A);
+			cout << endl; 
+		} 
+		 cout << "\nTOTAL ANSWERS= " << std::to_string(ctr) << endl;
 	}
 
 	// // indexing extensions - ony active if START_INDEX clauses or more
@@ -856,7 +902,7 @@ namespace iProlog{
 		for (int i = 0; i < l; i++)
 		{
 		  vss[i] = new IntMap();
-		}
+		} 
 		return vss;
 	}
 
@@ -882,7 +928,7 @@ namespace iProlog{
 		}
 		IMap<int> im;
 		vector<IMap<int>*> imaps = im.create(vmaps.size());
-		for (int i = 0; i < clauses.size(); i++)
+		for (int i = 0; i < clauses.size(); ++i)
 		{
 		  Clause* c = clauses[i];
 		  put(imaps, vmaps, c->xs, i + 1); // $$$ UGLY INC
@@ -900,6 +946,7 @@ namespace iProlog{
 	// Builds a new engine from a natural-language style assembler.nl file
 	Engine::~Engine(){
 	//	delete syms;
+		free(heap);
 		delete trail;
 		delete ustack;
 		delete spines;
@@ -908,19 +955,21 @@ namespace iProlog{
 
 	Engine::Engine(const std::string fname){
 		makeHeap();
-		query = init();
 		trail = new IntStack();
-		ustack = new IntStack();
-		clauses = dload(fname);
-    	cls = toNums(clauses);
-    	vmaps = vcreate(MAXIND);
-    	imaps = *(index(clauses, vmaps));
-	}
+		ustack = new IntStack();  
+		clauses = dload(fname); 
+		cls = toNums(clauses); 
+		query = init();
+		vmaps = vcreate(MAXIND);
+		if(index(clauses, vmaps) != NULL)
+    		imaps = *(index(clauses, vmaps));
+		}
+
 	Engine& Engine::operator=(const Engine& other){ // Assignment overload.
 		if( this == &other) return *this;
 		else{
 			slist = other.slist;
-			heap = other.heap;
+			*heap = *(other.heap);
 			*trail = *(other.trail);
 			*ustack = *(other.ustack);
 			*spines = *(other.spines);
@@ -934,7 +983,7 @@ namespace iProlog{
 	}
 	Engine::Engine(Engine &other){ // copy constructor.
 		slist = other.slist;
-		heap = other.heap;
+		*heap = *(other.heap);
 		*trail = *(other.trail);
 		*ustack = *(other.ustack);
 		*spines = *(other.spines);
@@ -945,4 +994,76 @@ namespace iProlog{
 		cls = other.cls;
 		syms = other.syms; 
 	} 
+
+  	template<typename K>
+  	void Engine::printVector(vector<K> x, bool flag){
+	  if(flag == true)
+		cout << "(";
+      for(auto t = x.begin(); t != x.end(); ++t){
+        cout << *t;
+      }
+      cout << ")";
+	}
+	
+	template<typename K>
+  	void Engine::printVector(vector<K> x, int limit){
+	  cout << " [";
+	  int tlimit =0;
+      for(auto t = x.begin(); t != x.end() && tlimit <= limit; ++t, ++tlimit){
+        cout << *t << " ";
+      }
+      cout << "]";
+    }
 }
+
+// int main()
+// {
+// 		string fname = "perms.pl.nl";
+// 	  	iProlog::Engine obj(fname); 
+// 		cout << "Heap length:" << obj.heap.size() << "\n";
+// 		cout << "Clauses Array: ";
+// 		iProlog::Engine::printVector<iProlog::Clause*>(obj.clauses, true);
+// 		cout << "Int Clause Array with elements equal to 'Clause' :";
+// 		iProlog::Engine::printVector<int>(obj.cls, true);
+// 		cout  << "\n"; 
+// 	   	cout << "Symbol map:";
+// 		obj.printMap(obj.syms);
+// 		cout  << "\n"; 
+// 		cout << "Symbol List:";
+// 		iProlog::Engine::printVector<string>(obj.slist, true);
+// 		cout  << "\n";  
+// 		obj.run();
+// 	return 0;
+// }
+/*
+  JAVA OUTPUT:
+  
+  perms.pl.nl:
+
+  Heap length:32768
+  Clauses Array: [iProlog.Clause@15db9742, iProlog.Clause@6d06d69c, iProlog.Clause@7852e922]
+  Int Clause Array with elements equal to 'Clause' :[0, 1, 2]
+  Symbol map:{add=0, s=1, goal=2}
+  Symbol List:[add, s, goal]
+  Spine Query:iProlog.Spine@4e25154f
+  ObStack Spine:[iProlog.Spine@4e25154f]
+  IMap array of Integer: null
+  IntMap array:[{}, {}, {}]
+  [0] *** ANSWER=[goal, [s, [s, [s, [s, 0]]]]]
+  TOTAL ANSWERS=1
+
+  perms.pl.nl:
+  
+	Heap length:32768
+	Clauses Array: [iProlog.Clause@15db9742, iProlog.Clause@6d06d69c, iProlog.Clause@7852e922, iProlog.Clause@4e25154f, iProlog.Clause@70dea4e, iProlog.Clause@5c647e05, iProlog.Clause@33909752, iProlog.Clause@55f96302, iProlog.Clause@3d4eac69, iProlog.Clause@42a57993, iProlog.Clause@75b84c92]
+	Int Clause Array with elements equal to 'Clause' :[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	Symbol map:{eq=0, sel=1, list=2, perm=3, nil=4, app=5, nrev=6, input=7, goal=8}
+	Symbol List:[eq, sel, list, perm, nil, app, nrev, input, goal]
+	Spine Query:iProlog.Spine@6bc7c054
+	ObStack Spine:[iProlog.Spine@6bc7c054]
+	IMap array of Integer: null
+	IntMap array:[{}, {}, {}]
+	[0] *** ANSWER=[goal, [list, 11, [list, 10, [list, 9, [list, 8, [list, 7, [list, 6, [list, 5, [list, 4, [list, 3, [list, 2, [list, 1, nil]]]]]]]]]]]]
+	TOTAL ANSWERS=1
+
+*/

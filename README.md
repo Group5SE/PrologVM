@@ -1,14 +1,22 @@
-# PrologVM
+# C++ based Prolog Virtual Machine
+ 
+Usage:
+./go.sh add
 
-Project: C++ based Prolog Virtual Machine
+Assuming Prolog folders are kept in progs/ folder.
 
-The Aim of this Project is to covert a C++ equivalent of the Prolog System developed in Java. The Project needs to be developed following various Software Engineering principles.
+Runs on Mac OS, Ubuntu & his flavors.
 
-This project is a self-contained shortcut allowing a “hitchhiker” to Prolog implementation to get the core of an efficient-enough Prolog system .Prolog’s execution algorithm is seen as iterated unfolding of a goal with heads of matching clauses and some low-level aspects of unification, that tend to be among the most frequently called operations of a Prolog machine.
+Mimicked the Java code available here: https://github.com/ptarau/iProlog
 
+Infrastructure needed:
+1)  SWI- Prolog http://www.swi-prolog.org/
+2)  C++ compiler(g++)
+3)  Boost libraries (https://dl.bintray.com/boostorg/beta/1.66.0.beta.1/source/)
 
-
-
-
-
-
+Contributors:
+1) Karthik Venkataramana Pemmaraju
+2) Charishma Damuluri
+3) Ram Aakarsh Iruvanti
+4) Keertana Sadam
+5) Bhavana 
