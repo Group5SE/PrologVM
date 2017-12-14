@@ -1,113 +1,46 @@
-<<<<<<< HEAD
+/*
+==============================================================================================
+Author: Keertana Sadam, Bhavana 
+Modifications and Enhancements: Karthik Venkataramana Pemmaraju.
+Compilation:g++ 
+Written on 12/11/2017
+===============================================================================================
+*/
+
+
 #ifndef PROG
 #define PROG
 
-#include "Engine.h"
-
-using namespace std;
-using namespace iProlog;
+#include "Engine.h" 
+ 
 
 namespace iProlog {
 
-	class Prog :public Engine
+	class Prog : public Engine
 	{
 	public:
-		Prog(std::string fname);
-		~Prog();
-
-		static void pp(std::string str);
-
-		static void println(std::string str);
 		
-		template<typename T>
-		static std::string maybeNull(const T &O);
+			Prog(std::string fname);
 
-		template<typename T>
-		static bool isListCons(const T &name);
+			template<typename T>
+			static void pp(T o);
+			
+			template<typename T>
+			static void println(T o);
+		
+			template<typename T>
+			std::string showTerm(T* o);
+			
+			std::string showTerm(int );
 
-		template<typename T>
-		static bool isOp(const T &name);
-
-		template<typename T>
-		static std::string st0(const T args[]);
-
-		void ppCode();
-
-		std::string Prog::showClause(Clause *s);
-
-		void ppGoals(IntList *bs);
-
-		void ppc(Spine *S);
-		/////////////// end of show
-
-		// possibly finite Stream support
-		template<typename T>
-		std::vector<T> *stream();
-
-		int characteristics();
-
-		long long estimateSize();
+			template<typename K>  
+			std::string printVector(std::vector<K>, bool flag);
+			
+			std::string showTerm(std::vector<std::string> O); 
+			void ppCode();
+			std::string showClause(Clause *s);
+			void ppc(const Spine *S);
 	};
-
-
 }
 #endif
 
-
-=======
-#ifndef PROG
-#define PROG
-
-#include "Engine.h"
-
-using namespace std;
-using namespace iProlog;
-
-namespace iProlog {
-
-	class Prog :public Engine
-	{
-	public:
-		Prog(std::string fname);
-		~Prog();
-
-		static void pp(std::string str);
-
-		static void println(std::string str);
-		
-		template<typename T>
-		static std::string maybeNull(const T &O);
-
-		template<typename T>
-		static bool isListCons(const T &name);
-
-		template<typename T>
-		static bool isOp(const T &name);
-
-		template<typename T>
-		static std::string st0(const T args[]);
-
-		void ppCode();
-
-		std::string Prog::showClause(Clause *s);
-
-		void ppGoals(IntList *bs);
-
-		void ppc(Spine *S);
-		/////////////// end of show
-
-		// possibly finite Stream support
-		template<typename T>
-		std::vector<T> *stream();
-
-		int characteristics();
-
-		long long estimateSize();
-	};
-
-
-}
-#endif
-
-
->>>>>>> a5235ca0e4b4b6d136cd44d8adff2b21be56fcc9
