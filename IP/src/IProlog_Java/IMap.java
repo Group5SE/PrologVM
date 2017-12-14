@@ -1,4 +1,8 @@
 
+/*
+ * author: Keerthana Sadam; Date: 11/27/2017
+ * Included test cases which covers all functions 
+ */
 package iProlog;
 import java.util.*;
 
@@ -166,4 +170,4 @@ final class IMap<K> implements java.io.Serializable {
 
 }
 
-// end
+

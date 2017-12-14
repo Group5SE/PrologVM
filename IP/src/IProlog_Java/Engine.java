@@ -1,3 +1,9 @@
+
+/*
+*author: keerthana Sadam; Date: 12/03/2017
+*Included test cases which checks all functions
+*/
+
 package iProlog;
 import java.util.*;
 
@@ -1032,6 +1038,26 @@ class Engine {
     Main.pp("");
     return imaps;
   }
+  public static void main(String[] args) {
+	  
+	  final String fname = "D:/UNT/IP/test/test_tokenizer/add.pl.nl" ;
+	  Engine obj = new Engine(fname);
+	  System.out.println("Heap:"+ Arrays.toString(obj.heap));
+	  System.out.println("Heap length:" + obj.heap.length);
+	  System.out.println("Clauses Array: "+ Arrays.toString(obj.clauses));
+	  System.out.println("Int Clause Array with elements equal to 'Clause' :" + Arrays.toString(obj.cls));
+	/*  System.out.println("symbol map values:"+ obj.syms.values());
+	  System.out.println("symbol map keys:"+ obj.syms.keySet());*/
+	  System.out.println("Symbol map:" + obj.syms);
+	  System.out.println("Symbol List:" + obj.slist);
+	  System.out.println("Spine Query:" + obj.query);
+	  System.out.println("ObStack Spine:"+(obj.spines));
+	  System.out.println("IMap array of Integer: "+ Arrays.toString(obj.imaps));
+	  System.out.println("IntMap array:"+ Arrays.toString(obj.vmaps));
+	  obj.run();
+}
+}
+
 //   public static void main(String[] args) {
 	  
 // 	  final String fname = "E:/Software Engineering/Term Project Clone/IP/test/test_tokenizer/perms.pl.nl" ;
@@ -1086,3 +1112,4 @@ TOTAL ANSWERS=1
 
 
 }
+
