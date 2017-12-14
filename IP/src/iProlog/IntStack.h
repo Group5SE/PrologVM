@@ -39,7 +39,13 @@ namespace iProlog {
     	void shrink();
     	void reverse();
     	std::vector <int> toArray(); 
-    	std::string toString();
+			std::string toString(); 
+      /*
+        Rule of 3.
+      */
+      IntStack& operator=(const IntStack&);
+      IntStack(IntStack &);
+      ~IntStack(); 
   };
 
 } // name space close.

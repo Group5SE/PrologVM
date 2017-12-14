@@ -1,6 +1,4 @@
 #echo go.sh <name_of_prog> assumed in dir ./progs
-# EDITED: CHARISHMA DAMULURI 
-# DATE: 12/13/2017
 mkdir out
 mkdir out/production
 export TARGET="out/production/IP"

@@ -63,7 +63,7 @@ class IntList {
   
   
  public static void main(String args[]){
-	  SimpleRandom r = new SimpleRandom();
+	  // SimpleRandom r = new SimpleRandom();
 	  int n = 23456, n1,n2,n3; 
 	  n = CustomGenerator.random(n);
 	  IntList headEle = new IntList(n);

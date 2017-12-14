@@ -25,7 +25,6 @@ s(17,18).
 
 dup(0,X,X).
 dup(N,X,R):-s(N1,N),app(X,X,XX),dup(N1,XX,R).
-
-% goal([X,Y]):-dup(10,[a,b,c,d],R),nrev(R,[X,Y|_]).
+ 
 
 goal([X,Y]):-dup(18,[a,b,c,d],[X,Y|_]).
